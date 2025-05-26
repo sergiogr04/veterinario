@@ -26,6 +26,5 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'isCliente' => \App\Http\Middleware\IsCliente::class,
         'isAdmin' => \App\Http\Middleware\IsAdmin::class,
-        'isTrabajador' => \App\Http\Middleware\IsTrabajador::class,
     ];
 }

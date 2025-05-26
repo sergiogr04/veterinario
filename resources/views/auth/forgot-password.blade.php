@@ -1,25 +1,28 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <div class="mb-6 text-gray-700 text-sm leading-relaxed">
+        ¿Olvidaste tu contraseña? No te preocupes. Introduce tu correo electrónico y te enviaremos un enlace para restablecerla.
     </div>
 
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}" class="space-y-6">
         @csrf
 
-        <!-- Email Address -->
+        <!-- Email -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <input id="email" name="email" type="email" value="{{ old('email') }}" required autofocus
+                class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition">
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+        <!-- Botón -->
+        <div class="flex justify-end">
+            <button type="submit"
+                    class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition font-semibold">
+                Enviar enlace de restablecimiento
+            </button>
         </div>
     </form>
 </x-guest-layout>
