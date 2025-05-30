@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\CustomResetPassword;
+use App\Models\Cliente\Mascota;
 
 
 class User extends Authenticatable
@@ -42,5 +43,10 @@ class User extends Authenticatable
     {
         $this->notify(new CustomResetPassword($token));
     }
+    public function mascotas()
+    {
+        return $this->hasMany(Mascota::class, 'id_cliente', 'id_usuario');
+    }
 
+    
 }

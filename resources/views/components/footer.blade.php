@@ -6,9 +6,21 @@
         </div>
         <div>
             <h3 class="text-lg font-semibold mb-2">Contacto</h3>
-            <p>📍 Av. de Andalucía, 45, Sevilla, España</p>
-            <p>📞 +34 954 123 456</p>
-            <p>📧 contacto@veterinariosanlorenzo.com</p>
+            <p>
+                📍 <a href="https://www.google.com/maps?q=Av.+de+Andalucía,+45,+Sevilla,+España" target="_blank" class="hover:text-blue-400">
+                    Av. de Andalucía, 45, Sevilla, España
+                </a>
+            </p>
+            <p>
+                📞 <a href="tel:+34954123456" class="hover:text-blue-400">
+                    +34 954 123 456
+                </a>
+            </p>
+            <p>
+                📧 <a href="mailto:contacto@veterinariosanlorenzo.com" class="hover:text-blue-400">
+                    contacto@veterinariosanlorenzo.com
+                </a>
+            </p>
         </div>
         <div>
             <h3 class="text-lg font-semibold mb-2">Horario</h3>

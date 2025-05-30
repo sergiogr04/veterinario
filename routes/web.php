@@ -1,43 +1,99 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Cliente\MascotaController;
+use App\Http\Controllers\Cliente\ContactoController;
+use App\Http\Controllers\Cliente\CitaController;
+use App\Http\Controllers\Cliente\HistorialController;
 
-// Página de bienvenida
-Route::get('/', function () {
-    return view('welcome');
-});
+/*
+|--------------------------------------------------------------------------
+| Rutas Públicas
+|--------------------------------------------------------------------------
+*/
 
-// CLIENTE
-Route::middleware(['auth', 'isCliente'])->group(function () {
-    Route::get('/dashboard_cliente', function () {
-        return view('dashboards.cliente');
-    })->name('dashboard_cliente');
-});
+Route::get('/', [LandingController::class, 'index'])->name('landing');
 
-// ADMIN
-Route::middleware(['auth', 'isAdmin'])->group(function () {
-    Route::get('/dashboard_admin', function () {
-        return view('dashboards.admin');
-    })->name('dashboard_admin');
-});
+/*
+|--------------------------------------------------------------------------
+| Rutas de Autenticación (Laravel Breeze o Fortify)
+|--------------------------------------------------------------------------
+*/
 
-// TRABAJADOR
-Route::middleware(['auth', 'isTrabajador'])->group(function () {
-    Route::get('/dashboard_trabajador', function () {
-        return view('dashboards.trabajador');
-    })->name('dashboard_trabajador');
-});
+require __DIR__ . '/auth.php';
 
-// PERFIL (disponible para todos los autenticados)
+/*
+|--------------------------------------------------------------------------
+| Rutas de Perfil (usuarios autenticados)
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Dashboards según el rol
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::middleware(['auth', 'isCliente'])->get('/dashboard_cliente', fn () => view('dashboards.cliente'))->name('dashboard_cliente');
+Route::middleware(['auth', 'isAdmin'])->get('/dashboard_admin', fn () => view('dashboards.admin'))->name('dashboard_admin');
+Route::middleware(['auth', 'isTrabajador'])->get('/dashboard_trabajador', fn () => view('dashboards.trabajador'))->name('dashboard_trabajador');
 
-require __DIR__.'/auth.php';
+/*
+|--------------------------------------------------------------------------
+| Rutas Cliente - Mascotas
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'isCliente'])->group(function () {
+    Route::get('/cliente/mascotas', [MascotaController::class, 'index'])->name('cliente.mascotas');
+    Route::get('/cliente/mascotas/{id}/historial', [HistorialController::class, 'mostrar'])->name('cliente.mascota.historial');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Rutas Cliente - Contacto
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'isCliente'])->group(function () {
+    Route::get('/cliente/contacto', fn () => view('cliente.contacto'))->name('cliente.contacto');
+    Route::post('/cliente/contacto', [ContactoController::class, 'enviar'])->name('cliente.contacto.enviar');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Rutas Cliente - Citas
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'isCliente'])->prefix('cliente')->group(function () {
+    Route::get('/citas', [CitaController::class, 'index'])->name('cliente.citas');
+    Route::post('/citas', [CitaController::class, 'index'])->name('cliente.citas'); // Para navegación sin mostrar en la URL
+
+    Route::post('/citas/reservar', [CitaController::class, 'reservar'])->name('cliente.citas.reservar');
+    Route::get('/citas/disponibles/{fecha}', [CitaController::class, 'horasDisponibles'])->name('cliente.citas.horas');
+
+    // Editar con token cifrado
+    Route::post('/citas/editar', [CitaController::class, 'redirigirEditar'])->name('cliente.citas.editar');
+    Route::get('/citas/editar/{token}', function ($token) {
+        $id = decrypt($token);
+        $cita = \App\Models\Cita::findOrFail($id);
+
+        if ($cita->id_cliente !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('cliente.citas.editar', compact('cita'));
+    })->name('cliente.citas.editar.formulario')->middleware(['auth', 'isCliente']);
+
+    Route::put('/citas/{cita}', [CitaController::class, 'actualizar'])->name('cliente.citas.actualizar');
+    Route::delete('/citas/{id}', [CitaController::class, 'eliminar'])->name('cliente.citas.eliminar');
+});

@@ -13,25 +13,29 @@
 
     <!-- Tailwind & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 <body class="flex flex-col min-h-screen font-sans antialiased bg-white text-gray-800">
-    {{-- Header personalizado --}}
-    @include('layouts.nav_roles')
 
-    {{-- Contenido principal --}}
+    {{-- Header de la landing --}}
+    @include('layouts.nav_landing')
+
     <main class="flex-grow">
         @yield('content')
     </main>
-
+    
     {{-- Footer personalizado --}}
     @include('components.footer')
 
-    {{-- Scroll suave a secciones --}}
+    {{-- Scroll suave para los botones --}}
     <script>
         function scrollToSection(id) {
             const el = document.getElementById(id);
             if (el) el.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
+
+    {{-- AlpineJS (si lo usas solo en landing) --}}
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 </html>
