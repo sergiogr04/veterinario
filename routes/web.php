@@ -8,6 +8,8 @@ use App\Http\Controllers\Cliente\ContactoController;
 use App\Http\Controllers\Cliente\CitaController;
 use App\Http\Controllers\Cliente\HistorialController;
 use App\Http\Controllers\Cliente\DashboardClienteController;
+use App\Http\Controllers\Trabajador\DashboardTrabajadorController;
+use App\Http\Controllers\Trabajador\ClienteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +47,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'isCliente'])->get('/dashboard_cliente', [DashboardClienteController::class, 'index'])->name('dashboard_cliente');
 Route::middleware(['auth', 'isAdmin'])->get('/dashboard_admin', fn () => view('dashboards.admin'))->name('dashboard_admin');
-Route::middleware(['auth', 'isTrabajador'])->get('/dashboard_trabajador', fn () => view('dashboards.trabajador'))->name('dashboard_trabajador');
+Route::middleware(['auth', 'isTrabajador'])->get('/dashboard_trabajador', [DashboardTrabajadorController::class, 'index'])->name('dashboard_trabajador');
 
 /*
 |--------------------------------------------------------------------------
@@ -94,7 +96,21 @@ Route::middleware(['auth', 'isCliente'])->prefix('cliente')->group(function () {
 
         return view('cliente.citas.editar', compact('cita'));
     })->name('cliente.citas.editar.formulario')->middleware(['auth', 'isCliente']);
-
+    
     Route::put('/citas/{cita}', [CitaController::class, 'actualizar'])->name('cliente.citas.actualizar');
     Route::delete('/citas/{id}', [CitaController::class, 'eliminar'])->name('cliente.citas.eliminar');
 });
+
+
+Route::prefix('trabajador/clientes')->name('trabajador.clientes.')->group(function () {
+    Route::get('/', [ClienteController::class, 'index'])->name('index');
+    Route::get('/{id}', [ClienteController::class, 'show'])->name('show');
+    Route::put('/{id}', [ClienteController::class, 'update'])->name('update');
+    Route::delete('/{id}', [ClienteController::class, 'destroy'])->name('destroy');
+    Route::post('/', [ClienteController::class, 'store'])->name('store');
+});
+
+Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador')->group(function () {
+    Route::get('/clientes', [ClienteController::class, 'index'])->name('trabajador.clientes');
+});
+
