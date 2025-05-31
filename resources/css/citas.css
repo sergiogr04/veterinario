@@ -1,0 +1,32 @@
+/* Celdas cuadradas del calendario */
+.celda-calendario {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    transition: background 0.3s;
+}
+
+.bg-verde {
+    background-color: #bbf7d0; /* green-200 */
+}
+.bg-verde:hover {
+    background-color: #86efac; /* green-300 */
+}
+
+.bg-naranja {
+    background-color: #fde68a; /* yellow-200 */
+}
+.bg-naranja:hover {
+    background-color: #fcd34d; /* yellow-300 */
+}
+
+.bg-rojo {
+    background-color: #fecaca; /* red-200 */
+    cursor: not-allowed;
+    pointer-events: none;
+}

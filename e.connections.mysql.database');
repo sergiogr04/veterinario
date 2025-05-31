@@ -1,0 +1,21 @@
+[90m= [39m[
+    {#5260
+      +"[1mTables_in_veterinario[22m": "[32mcache[39m",
+    },
+    {#5258
+      +"[1mTables_in_veterinario[22m": "[32mcache_locks[39m",
+    },
+    {#5257
+      +"[1mTables_in_veterinario[22m": "[32mfailed_jobs[39m",
+    },
+    {#5256
+      +"[1mTables_in_veterinario[22m": "[32mjob_batches[39m",
+    },
+    {#5261
+      +"[1mTables_in_veterinario[22m": "[32mjobs[39m",
+    },
+    {#5262
+      +"[1mTables_in_veterinario[22m": "[32mmigrations[39m",
+    },
+  ]
+
