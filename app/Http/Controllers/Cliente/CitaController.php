@@ -77,22 +77,35 @@ class CitaController extends Controller
     {
         $slots = CitaService::getSlots($fecha);
     
-        // Trae solo las horas ocupadas por otras citas ese día
+        // Normaliza formato HH:mm
         $ocupadas = Cita::whereDate('fecha', $fecha)
             ->pluck('hora')
             ->map(function ($hora) {
-                return \Carbon\Carbon::parse($hora)->format('H:i');
+                return Carbon::parse($hora)->format('H:i'); // ¡aquí el fix!
             })
             ->toArray();
-
     
         // Filtra los horarios libres
         $disponibles = array_filter($slots, function ($hora) use ($ocupadas) {
             return !in_array($hora, $ocupadas);
         });
     
+        // Si es hoy, elimina horas pasadas
+        if (Carbon::parse($fecha)->isToday()) {
+            $ahora = Carbon::now();
+        
+            $disponibles = array_filter($disponibles, function ($hora) use ($fecha, $ahora) {
+                // Creamos una fecha-hora exacta del slot y lo comparamos con ahora
+                $slotDateTime = Carbon::createFromFormat('Y-m-d H:i', "$fecha $hora");
+        
+                return $slotDateTime->greaterThan($ahora);
+            });
+        }
+        
+    
         return response()->json(array_values($disponibles));
     }
+    
     
     public function reservar(Request $request)
     {

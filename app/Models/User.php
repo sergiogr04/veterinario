@@ -21,10 +21,11 @@ class User extends Authenticatable
         'dni',
         'nombre',
         'apellidos',
+        'telefono',
         'email',
         'password',
         'rol',
-    ];
+    ];    
     
 
     protected $hidden = [

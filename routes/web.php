@@ -7,6 +7,7 @@ use App\Http\Controllers\Cliente\MascotaController;
 use App\Http\Controllers\Cliente\ContactoController;
 use App\Http\Controllers\Cliente\CitaController;
 use App\Http\Controllers\Cliente\HistorialController;
+use App\Http\Controllers\Cliente\DashboardClienteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +43,7 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'isCliente'])->get('/dashboard_cliente', fn () => view('dashboards.cliente'))->name('dashboard_cliente');
+Route::middleware(['auth', 'isCliente'])->get('/dashboard_cliente', [DashboardClienteController::class, 'index'])->name('dashboard_cliente');
 Route::middleware(['auth', 'isAdmin'])->get('/dashboard_admin', fn () => view('dashboards.admin'))->name('dashboard_admin');
 Route::middleware(['auth', 'isTrabajador'])->get('/dashboard_trabajador', fn () => view('dashboards.trabajador'))->name('dashboard_trabajador');
 

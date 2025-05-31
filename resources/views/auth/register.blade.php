@@ -25,6 +25,14 @@
                 class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition">
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+        
+        <!-- Teléfono -->
+        <div>
+            <x-input-label for="telefono" :value="__('Teléfono')" />
+            <input id="telefono" name="telefono" type="text" value="{{ old('telefono') }}" required autocomplete="tel"
+                class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition">
+            <x-input-error :messages="$errors->get('telefono')" class="mt-2" />
+        </div>
 
         <!-- DNI -->
         <div>

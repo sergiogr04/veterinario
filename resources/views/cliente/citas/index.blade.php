@@ -6,21 +6,21 @@
         {{ request('misCitas') ? '📋 Tus Citas Programadas' : '📅 Pedir Cita' }}
     </h1>
     <div class="mb-6 text-right">
-    <form method="POST" action="{{ route('cliente.citas') }}" class="inline">
-    @csrf
-    @if(request('misCitas'))
-        {{-- Volver a pedir cita --}}
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-            📅 Volver a Pedir Cita
-        </button>
-    @else
-        {{-- Ver mis citas --}}
-        <input type="hidden" name="misCitas" value="1">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-            📋 Ver mis citas
-        </button>
-    @endif
-</form>
+        <form method="POST" action="{{ route('cliente.citas') }}" class="inline">
+            @csrf
+            @if(request('misCitas'))
+            {{-- Volver a pedir cita --}}
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                📅 Volver a Pedir Cita
+            </button>
+            @else
+            {{-- Ver mis citas --}}
+            <input type="hidden" name="misCitas" value="1">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                📋 Ver mis citas
+            </button>
+            @endif
+        </form>
 
     </div>
     <div>
@@ -37,33 +37,33 @@
         $diasPorFecha = collect($dias)->keyBy('fecha');
         @endphp
         <div class="flex justify-between items-center mb-4">
-        @if ($mes->format('Y-m') > now()->format('Y-m'))
-    <form method="POST" action="{{ route('cliente.citas') }}" class="inline">
-        @csrf
-        <input type="hidden" name="mes" value="{{ $mesAnterior }}">
-        @if(request('misCitas'))
-            <input type="hidden" name="misCitas" value="1">
-        @endif
-        <button type="submit" class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">← Mes anterior</button>
-    </form>
-@else
-    <span class="text-gray-400">← Mes anterior</span>
-@endif
+            @if ($mes->format('Y-m') > now()->format('Y-m'))
+            <form method="POST" action="{{ route('cliente.citas') }}" class="inline">
+                @csrf
+                <input type="hidden" name="mes" value="{{ $mesAnterior }}">
+                @if(request('misCitas'))
+                <input type="hidden" name="misCitas" value="1">
+                @endif
+                <button type="submit" class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">← Mes anterior</button>
+            </form>
+            @else
+            <span class="text-gray-400">← Mes anterior</span>
+            @endif
 
             <h2 class="text-xl font-semibold text-gray-700">{{ $mes->translatedFormat('F Y') }}</h2>
 
             @if ($mes->format('Y-m') < now()->addMonth()->format('Y-m'))
-    <form method="POST" action="{{ route('cliente.citas') }}" class="inline">
-        @csrf
-        <input type="hidden" name="mes" value="{{ $siguienteMes }}">
-        @if(request('misCitas'))
-            <input type="hidden" name="misCitas" value="1">
-        @endif
-        <button type="submit" class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">Mes siguiente →</button>
-    </form>
-@else
-    <span class="text-gray-400">Mes siguiente →</span>
-@endif
+                <form method="POST" action="{{ route('cliente.citas') }}" class="inline">
+                    @csrf
+                    <input type="hidden" name="mes" value="{{ $siguienteMes }}">
+                    @if(request('misCitas'))
+                    <input type="hidden" name="misCitas" value="1">
+                    @endif
+                    <button type="submit" class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">Mes siguiente →</button>
+                </form>
+                @else
+                <span class="text-gray-400">Mes siguiente →</span>
+                @endif
         </div>
 
         <div class="text-center grid grid-cols-7 text-sm text-gray-500 mb-2 font-semibold">
@@ -79,6 +79,7 @@
         <div class="grid grid-cols-7 gap-2 border border-gray-300 rounded overflow-hidden text-center text-sm auto-rows-fr min-h-[100px]">
             @foreach ($periodo as $fecha)
             @php
+            $esPasado = $fecha->lt(\Carbon\Carbon::today());
             $fechaStr = $fecha->format('Y-m-d');
             $esDelMes = $fecha->month === $mes->month;
             $citasDelDia = request('misCitas') ? ($citasUsuario->get($fechaStr) ?? null) : null;
@@ -89,27 +90,35 @@
             @if (!$esDelMes)
             <div class="bg-gray-100 text-gray-300 celda-calendario">{{ $fecha->day }}</div>
             @elseif (request('misCitas'))
-    <div class="{{ $citasDelDia 
+            <div class="{{ $citasDelDia 
         ? 'celda-calendario bg-blue-200 hover:bg-blue-300 font-semibold rounded transition cursor-pointer' 
         : 'celda-calendario bg-white border border-gray-300 text-gray-700 rounded' }}"
-        @if($citasDelDia)
-            onclick='verCitasDelDia(@json($citasDelDia))'
-        @endif>
-        {{ $fecha->day }}
-    </div>
+                @if($citasDelDia)
+                onclick='verCitasDelDia(@json($citasDelDia))'
+                @endif>
+                {{ $fecha->day }}
+            </div>
 
 
             @else
             @if (!$diaData)
             <div class="bg-gray-100 celda-calendario"></div>
             @else
-            <button onclick="abrirFormulario('{{ $fechaStr }}')"
-                class="celda-calendario
-                    {{ $color === 'verde' ? 'bg-verde' : '' }}
-                    {{ $color === 'naranja' ? 'bg-naranja' : '' }}
-                    {{ $color === 'rojo' ? 'bg-rojo' : '' }}">
+            @if ($esPasado)
+            <button
+                title="No disponible"
+                class="celda-calendario bg-gray-100 text-gray-400 cursor-not-allowed">
                 {{ $fecha->day }}
             </button>
+            @else
+            <button onclick="abrirFormulario('{{ $fechaStr }}')"
+                class="celda-calendario
+                {{ $color === 'verde' ? 'bg-verde' : '' }}
+                {{ $color === 'naranja' ? 'bg-naranja' : '' }}
+                {{ $color === 'rojo' ? 'bg-rojo' : '' }}">
+                {{ $fecha->day }}
+            </button>
+            @endif
             @endif
             @endif
             @endforeach
@@ -169,10 +178,10 @@
 {{-- Script para formulario --}}
 <script>
     function abrirFormulario(fecha) {
+
         document.getElementById('fechaSeleccionada').innerText = fecha;
         document.getElementById('fechaInput').value = fecha;
         document.getElementById('formularioCita').classList.remove('hidden');
-
         // Cargar horas disponibles
         fetch(`/cliente/citas/disponibles/${fecha}`)
             .then(res => res.json())
@@ -218,23 +227,33 @@
         const modal = document.createElement('div');
         modal.className = "fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50";
 
-        const contenido = citas.map(cita => `
-    <div class="mb-4 border-b pb-2">
-        <p><strong>Hora:</strong> ${cita.hora}</p>
-        <p><strong>Tipo:</strong> ${cita.tipo}</p>
-        <p><strong>Mascota:</strong> ${cita.mascota_nombre}</p>
-        <p><strong>Síntomas:</strong> ${cita.sintomas}</p>
-        <div class="mt-2 text-right space-x-2">
-        <form action="{{ route('cliente.citas.editar') }}" method="POST" class="inline-block">
-    @csrf
-    <input type="hidden" name="id_cita" value="${cita.id_cita}">
-    <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">✏️ Editar</button>
-</form>
+        const ahora = new Date();
 
-            <button onclick="eliminarCita(${cita.id_cita})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">🗑️ Eliminar</button>
+        const contenido = citas.map(cita => {
+            const citaDateTime = new Date(`${cita.fecha}T${cita.hora}`);
+
+            const botones = citaDateTime > ahora ? `
+        <form action="{{ route('cliente.citas.editar') }}" method="POST" class="inline-block">
+            @csrf
+            <input type="hidden" name="id_cita" value="${cita.id_cita}">
+            <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">✏️ Editar</button>
+        </form>
+        <button onclick="eliminarCita(${cita.id_cita})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">🗑️ Eliminar</button>
+    ` : `<span class="text-gray-400 italic">No editable</span>`;
+
+            return `
+        <div class="mb-4 border-b pb-2">
+            <p><strong>Hora:</strong> ${cita.hora}</p>
+            <p><strong>Tipo:</strong> ${cita.tipo}</p>
+            <p><strong>Mascota:</strong> ${cita.mascota_nombre}</p>
+            <p><strong>Síntomas:</strong> ${cita.sintomas}</p>
+            <div class="mt-2 text-right space-x-2">
+                ${botones}
+            </div>
         </div>
-    </div>
-`).join('');
+    `;
+        }).join('');
+
 
 
         modal.innerHTML = `
@@ -247,23 +266,26 @@
 
         document.body.appendChild(modal);
     }
+
     function eliminarCita(id) {
         if (confirm('¿Estás seguro de que quieres eliminar esta cita?')) {
             fetch(`/cliente/citas/${id}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ _method: 'DELETE' })
-            })
-            .then(res => {
-                if (res.ok) {
-                    location.reload();
-                } else {
-                    alert('Ocurrió un error al eliminar la cita');
-                }
-            });
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        _method: 'DELETE'
+                    })
+                })
+                .then(res => {
+                    if (res.ok) {
+                        location.reload();
+                    } else {
+                        alert('Ocurrió un error al eliminar la cita');
+                    }
+                });
         }
     }
 </script>

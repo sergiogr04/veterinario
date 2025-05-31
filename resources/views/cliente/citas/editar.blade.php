@@ -4,6 +4,9 @@
 @section('content')
 <div class="max-w-2xl mx-auto py-12 px-4">
     <h1 class="text-3xl font-bold text-blue-800 mb-6">✏️ Editar Cita</h1>
+    @php
+    $citaPasada = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $cita->fecha . ' ' . $cita->hora)->isPast();
+@endphp
 
     <form action="{{ route('cliente.citas.actualizar', $cita->id_cita) }}" method="POST" class="bg-white shadow rounded p-6">
         @csrf
@@ -44,12 +47,17 @@
         </select>
 
         <div class="flex justify-between gap-4">
-            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                💾 Guardar Cambios
-            </button>
-            <a href="{{ route('cliente.citas', ['misCitas' => 1]) }}" class="w-full bg-gray-300 text-gray-800 py-2 rounded hover:bg-gray-400 text-center">
-                ❌ Cancelar
-            </a>
+        @if (!$citaPasada)
+    <div class="flex justify-between gap-4">
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+            💾 Guardar Cambios
+        </button>
+        <a href="{{ route('cliente.citas', ['misCitas' => 1]) }}" class="w-full bg-gray-300 text-gray-800 py-2 rounded hover:bg-gray-400 text-center">
+            ❌ Cancelar
+        </a>
+    </div>
+@endif
+
         </div>
 
     </form>
