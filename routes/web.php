@@ -3,13 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Cliente\MascotaController;
 use App\Http\Controllers\Cliente\ContactoController;
 use App\Http\Controllers\Cliente\CitaController;
 use App\Http\Controllers\Cliente\HistorialController;
 use App\Http\Controllers\Cliente\DashboardClienteController;
 use App\Http\Controllers\Trabajador\DashboardTrabajadorController;
 use App\Http\Controllers\Trabajador\ClienteController;
+use App\Http\Controllers\Cliente\MascotaController as MascotaClienteController;
+use App\Http\Controllers\Trabajador\MascotaController as MascotaTrabajadorController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +59,7 @@ Route::middleware(['auth', 'isTrabajador'])->get('/dashboard_trabajador', [Dashb
 */
 
 Route::middleware(['auth', 'isCliente'])->group(function () {
-    Route::get('/cliente/mascotas', [MascotaController::class, 'index'])->name('cliente.mascotas');
+    Route::get('/cliente/mascotas', [MascotaClienteController::class, 'index'])->name('cliente.mascotas');
     Route::get('/cliente/mascotas/{id}/historial', [HistorialController::class, 'mostrar'])->name('cliente.mascota.historial');
 });
 
@@ -108,7 +111,32 @@ Route::prefix('trabajador/clientes')->name('trabajador.clientes.')->group(functi
     Route::put('/{id}', [ClienteController::class, 'update'])->name('update');
     Route::delete('/{id}', [ClienteController::class, 'destroy'])->name('destroy');
     Route::post('/', [ClienteController::class, 'store'])->name('store');
+    // 🔍 Buscar por DNI
+    Route::get('/dni/{dni}', function ($dni) {
+        $cliente = \App\Models\User::where('dni', $dni)->where('rol', 'cliente')->first();
+
+        if (!$cliente) {
+            return response()->json(['success' => false]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'id' => $cliente->id_usuario,
+            'nombre' => $cliente->nombre,
+            'apellidos' => $cliente->apellidos
+        ]);
+    });
 });
+Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador/mascotas')->name('trabajador.mascotas.')->group(function () {
+    Route::get('/', [MascotaTrabajadorController::class, 'index'])->name('index');
+    Route::get('/{id}', [MascotaTrabajadorController::class, 'show'])->name('show');
+    Route::post('/', [MascotaTrabajadorController::class, 'store'])->name('store');
+    Route::put('/{id}', [MascotaTrabajadorController::class, 'update'])->name('update');
+    Route::delete('/{id}', [MascotaTrabajadorController::class, 'destroy'])->name('destroy');
+
+    Route::get('/historial/{id}', [MascotaTrabajadorController::class, 'verHistorial'])->name('historial');
+});
+
 
 Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador')->group(function () {
     Route::get('/clientes', [ClienteController::class, 'index'])->name('trabajador.clientes');

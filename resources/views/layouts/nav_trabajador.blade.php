@@ -9,8 +9,9 @@
         <nav class="hidden md:flex space-x-6 text-gray-700 font-medium">
             <a href="{{ route('trabajador.clientes') }}" class="hover:text-blue-600">Clientes</a>
             <a href="#" class="hover:text-blue-600">Gestión de Citas</a>
-            <a href="#" class="hover:text-blue-600">Animales</a>
+            <a href="{{ route('trabajador.mascotas.index') }}" class="hover:text-blue-600">Animales</a>
         </nav>
+
 
         {{-- Usuario con menú desplegable --}}
         <div class="hidden md:block relative" @click.away="userMenu = false">
@@ -43,7 +44,7 @@
     <div x-show="mobileMenu" x-transition class="md:hidden bg-white shadow-md px-6 py-4 space-y-2">
         <a href="{{ route('trabajador.clientes') }}" class="hover:text-blue-600">Clientes</a>
         <a href="#" class="block hover:text-blue-600">Gestión de Citas</a>
-        <a href="#" class="block hover:text-blue-600">Animales</a>
+        <a href="{{ route('trabajador.mascotas.index') }}" class="block hover:text-blue-600">Animales</a>
         <hr>
         <form method="POST" action="{{ route('logout') }}">
             @csrf

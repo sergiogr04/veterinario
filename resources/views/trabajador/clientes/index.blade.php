@@ -61,6 +61,23 @@
 @include('trabajador.clientes.partials.modales')
 
 <script>
+function showToast(mensaje, tipo = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `px-4 py-3 rounded shadow text-white animate-slide-in-right ${
+        tipo === 'success' ? 'bg-green-600' :
+        tipo === 'error'   ? 'bg-red-600'   :
+        tipo === 'info'    ? 'bg-blue-600'  : 'bg-gray-600'
+    }`;
+    toast.textContent = mensaje;
+
+    document.getElementById('toast-container').appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+}
+
 function abrirModalCrear() {
     document.getElementById('modalCrear').classList.remove('hidden');
 }
@@ -112,7 +129,6 @@ function editarCliente(id) {
         document.getElementById('editar_dni').value = data.dni;
         document.getElementById('editar_email').value = data.email;
 
-
         document.getElementById('modalEditar').classList.remove('hidden');
     });
 }
@@ -121,10 +137,10 @@ document.getElementById('formEditar').addEventListener('submit', function(e) {
     e.preventDefault();
     const id = document.getElementById('editar_id').value;
     const form = new FormData(this);
-    form.append('_method', 'PUT'); // Esto es clave
+    form.append('_method', 'PUT');
 
     fetch(`/trabajador/clientes/${id}`, {
-        method: 'POST', // Laravel interpretará PUT con _method
+        method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
@@ -133,14 +149,13 @@ document.getElementById('formEditar').addEventListener('submit', function(e) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            alert('Cliente actualizado');
-            location.reload();
+            showToast('Cliente actualizado correctamente', 'success');
+            setTimeout(() => location.reload(), 1500);
         } else {
-            alert('Error al actualizar');
+            showToast('Error al actualizar cliente', 'error');
         }
     });
 });
-
 
 document.getElementById('formCrear').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -148,16 +163,18 @@ document.getElementById('formCrear').addEventListener('submit', function(e) {
 
     fetch(`/trabajador/clientes`, {
         method: 'POST',
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-        body: new URLSearchParams(form)
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: form
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            alert('Cliente creado');
-            location.reload();
+            showToast('Cliente creado correctamente', 'success');
+            setTimeout(() => location.reload(), 1500);
         } else {
-            alert('Error al crear');
+            showToast('Error al crear cliente', 'error');
         }
     });
 });
@@ -167,13 +184,15 @@ function eliminarCliente(id) {
 
     fetch(`/trabajador/clientes/${id}`, {
         method: 'DELETE',
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') }
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            alert('Cliente eliminado');
-            location.reload();
+            showToast('Cliente eliminado correctamente', 'success');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast('Error al eliminar cliente', 'error');
         }
     });
 }

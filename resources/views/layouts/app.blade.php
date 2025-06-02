@@ -33,5 +33,36 @@
             if (el) el.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
+    <div id="toast-container" class="fixed top-5 right-5 space-y-2 z-[9999]"></div>
+    <script>
+function showToast(mensaje, tipo = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `px-4 py-3 rounded shadow text-white animate-slide-in-right ${
+        tipo === 'success' ? 'bg-green-600' :
+        tipo === 'error'   ? 'bg-red-600'   :
+        tipo === 'info'    ? 'bg-blue-600'  : 'bg-gray-600'
+    }`;
+    toast.textContent = mensaje;
+
+    document.getElementById('toast-container').appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+}
+</script>
+
+<style>
+@keyframes slide-in-right {
+  0%   { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s ease-out;
+  transition: opacity 0.5s ease;
+}
+</style>
+
 </body>
 </html>
