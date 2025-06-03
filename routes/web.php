@@ -4,13 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Cliente\ContactoController;
-use App\Http\Controllers\Cliente\CitaController;
 use App\Http\Controllers\Cliente\HistorialController;
 use App\Http\Controllers\Cliente\DashboardClienteController;
 use App\Http\Controllers\Trabajador\DashboardTrabajadorController;
 use App\Http\Controllers\Trabajador\ClienteController;
 use App\Http\Controllers\Cliente\MascotaController as MascotaClienteController;
 use App\Http\Controllers\Trabajador\MascotaController as MascotaTrabajadorController;
+use App\Http\Controllers\Cliente\CitaController as CitaClienteController;
+use App\Http\Controllers\Trabajador\CitaController as CitaTrabajadorController;
+
 
 
 
@@ -81,14 +83,14 @@ Route::middleware(['auth', 'isCliente'])->group(function () {
 */
 
 Route::middleware(['auth', 'isCliente'])->prefix('cliente')->group(function () {
-    Route::get('/citas', [CitaController::class, 'index'])->name('cliente.citas');
-    Route::post('/citas', [CitaController::class, 'index'])->name('cliente.citas'); // Para navegación sin mostrar en la URL
+    Route::get('/citas', [CitaClienteController::class, 'index'])->name('cliente.citas');
+    Route::post('/citas', [CitaClienteController::class, 'index'])->name('cliente.citas'); // Para navegación sin mostrar en la URL
 
-    Route::post('/citas/reservar', [CitaController::class, 'reservar'])->name('cliente.citas.reservar');
-    Route::get('/citas/disponibles/{fecha}', [CitaController::class, 'horasDisponibles'])->name('cliente.citas.horas');
+    Route::post('/citas/reservar', [CitaClienteController::class, 'reservar'])->name('cliente.citas.reservar');
+    Route::get('/citas/disponibles/{fecha}', [CitaClienteController::class, 'horasDisponibles'])->name('cliente.citas.horas');
 
     // Editar con token cifrado
-    Route::post('/citas/editar', [CitaController::class, 'redirigirEditar'])->name('cliente.citas.editar');
+    Route::post('/citas/editar', [CitaClienteController::class, 'redirigirEditar'])->name('cliente.citas.editar');
     Route::get('/citas/editar/{token}', function ($token) {
         $id = decrypt($token);
         $cita = \App\Models\Cita::findOrFail($id);
@@ -100,8 +102,8 @@ Route::middleware(['auth', 'isCliente'])->prefix('cliente')->group(function () {
         return view('cliente.citas.editar', compact('cita'));
     })->name('cliente.citas.editar.formulario')->middleware(['auth', 'isCliente']);
     
-    Route::put('/citas/{cita}', [CitaController::class, 'actualizar'])->name('cliente.citas.actualizar');
-    Route::delete('/citas/{id}', [CitaController::class, 'eliminar'])->name('cliente.citas.eliminar');
+    Route::put('/citas/{cita}', [CitaClienteController::class, 'actualizar'])->name('cliente.citas.actualizar');
+    Route::delete('/citas/{id}', [CitaClienteController::class, 'eliminar'])->name('cliente.citas.eliminar');
 });
 
 
@@ -127,6 +129,7 @@ Route::prefix('trabajador/clientes')->name('trabajador.clientes.')->group(functi
         ]);
     });
 });
+
 Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador/mascotas')->name('trabajador.mascotas.')->group(function () {
     Route::get('/', [MascotaTrabajadorController::class, 'index'])->name('index');
     Route::get('/{id}', [MascotaTrabajadorController::class, 'show'])->name('show');
@@ -135,6 +138,12 @@ Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador/mascotas')->name
     Route::delete('/{id}', [MascotaTrabajadorController::class, 'destroy'])->name('destroy');
 
     Route::get('/historial/{id}', [MascotaTrabajadorController::class, 'verHistorial'])->name('historial');
+});
+Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador/citas')->name('trabajador.citas.')->group(function () {
+    Route::get('/', [CitaTrabajadorController::class, 'index'])->name('index');
+    Route::get('/{id}', [CitaTrabajadorController::class, 'ver'])->name('ver');
+    Route::post('/{id}/atender', [CitaTrabajadorController::class, 'atender'])->name('atender');
+    Route::delete('/{id}', [CitaTrabajadorController::class, 'destroy'])->name('eliminar');
 });
 
 

@@ -32,6 +32,7 @@ class Mascota extends Model
     // 🔗 Relación: una mascota tiene muchos historiales médicos
     public function historial()
     {
-        return $this->hasMany(Historial::class, 'id_mascota');
+        return $this->hasMany(Historial::class, 'id_mascota', 'id_mascota')->orderByDesc('fecha');
     }
+    
 }

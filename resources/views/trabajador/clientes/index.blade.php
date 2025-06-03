@@ -34,15 +34,9 @@
                             <td class="px-6 py-4">{{ $cliente->telefono ?? '—' }}</td>
                             <td class="px-6 py-4">{{ $cliente->email }}</td>
                             <td class="px-6 py-4 text-center space-x-2">
-                                <button onclick="verCliente({{ $cliente->id_usuario }})" class="text-blue-500 hover:text-blue-700" title="Ver">
-                                    👁
-                                </button>
-                                <button onclick="editarCliente({{ $cliente->id_usuario }})" class="text-yellow-500 hover:text-yellow-700" title="Editar">
-                                    ✏️
-                                </button>
-                                <button onclick="eliminarCliente({{ $cliente->id_usuario }})" class="text-red-500 hover:text-red-700" title="Eliminar">
-                                    🗑
-                                </button>
+                                <button onclick="verCliente({{ $cliente->id_usuario }})" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-xs">👁 Ver</button>
+                                <button onclick="editarCliente({{ $cliente->id_usuario }})" class="bg-yellow-100 hover:text-yellow-800 text-yellow-600 px-3 py-1 rounded text-xs">✏️ Editar</button>
+                                <button onclick="eliminarCliente({{ $cliente->id_usuario }})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs">🗑 Eliminar</button>
                             </td>
                         </tr>
                     @empty
