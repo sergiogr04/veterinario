@@ -14,7 +14,11 @@
 
         {{-- Fecha --}}
         <label class="block mb-2 text-sm font-medium">Fecha</label>
-        <input type="date" name="fecha" value="{{ $cita->fecha }}" class="w-full border px-3 py-2 rounded mb-4" onchange="cargarHorasDisponibles(this.value)" required>
+        @php
+            $hoy = \Carbon\Carbon::now()->format('Y-m-d');
+        @endphp
+
+        <input type="date" name="fecha" value="{{ $cita->fecha }}" class="w-full border px-3 py-2 rounded mb-4" onchange="cargarHorasDisponibles(this.value)" min="{{ $hoy }}" required>
 
         {{-- Hora --}}
 <label class="block mb-2 text-sm font-medium">Hora</label>

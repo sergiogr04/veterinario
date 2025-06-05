@@ -13,11 +13,10 @@ class CitaController extends Controller
     public function index()
     {
         $hoy = Carbon::now()->toDateString();
-        $horaActual = Carbon::now()->format('H:i:s');
 
         $citasHoy = Cita::with(['mascota.cliente'])
             ->where('fecha', $hoy)
-            ->where('hora', '>=', $horaActual)
+            ->where('estado',"pendiente")
             ->orderBy('hora')
             ->get();
 
@@ -27,6 +26,15 @@ class CitaController extends Controller
             ->orderBy('hora')
             ->get();
 
+        $citas = Cita::where('estado', 'pendiente')->get();
+        foreach ($citas as $cita) {
+            $fechaHora = Carbon::createFromFormat('Y-m-d H:i:s', $cita->fecha . ' ' . $cita->hora);
+            
+            if ($fechaHora->addHours(3)->isPast()) {
+                $cita->estado = 'no_asistio';
+                $cita->save();
+            }
+        }
         return view('trabajador.citas.index', compact('citasHoy', 'citasFuturas'));
     }
 
@@ -58,8 +66,10 @@ class CitaController extends Controller
         'descripcion' => $validated['descripcion'],
     ]);
 
-    // Elimina la cita
-    $cita->delete();
+    $cita->estado = 'atendida';
+    $cita->save();
+
+   
 
     return response()->json(['success' => true]);
 }

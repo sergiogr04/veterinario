@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-6">
+<div class="py-10">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <h1 class="text-2xl font-bold text-gray-800 pb-5">🐾 Gestión de Animales</h1>
 

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-blue-900">📅 Gestión de Citas</h1>
+    <h1 class="text-2xl font-bold text-gray-800 pb-5">📅 Gestión de Citas</h1>
 
     <h2 class="text-xl font-semibold text-gray-700 mb-2">🔴 Citas para hoy</h2>
     <div class="overflow-x-auto mb-6">

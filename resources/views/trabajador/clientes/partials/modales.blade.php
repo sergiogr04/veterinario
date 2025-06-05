@@ -79,3 +79,38 @@
         </form>
     </div>
 </div>
+
+{{-- 📋 MODAL VER HISTORIAL --}}
+<div id="modalHistorial" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow">
+        <h2 id="historial_titulo" class="text-xl font-semibold text-blue-800 mb-4">📋 Historial Médico</h2>
+        <table class="w-full text-sm border rounded shadow-sm">
+            <thead class="bg-gray-100 text-left">
+                <tr>
+                    <th class="px-3 py-2">Fecha</th>
+                    <th class="px-3 py-2">Peso</th>
+                    <th class="px-3 py-2">Descripción</th>
+                    <th class="px-3 py-2 text-center">Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tablaHistorial" class="divide-y divide-gray-200"></tbody>
+        </table>
+        <div class="mt-4 text-right">
+            <button onclick="cerrarModal('modalHistorial')" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded shadow">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+{{-- 🔍 MODAL DETALLE HISTORIAL --}}
+<div id="modalDetalleHistorial" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <h2 class="text-lg font-semibold text-blue-800 mb-4">🔍 Detalle del Historial</h2>
+        <p><strong>Fecha:</strong> <span id="detalle_fecha"></span></p>
+        <p><strong>Peso:</strong> <span id="detalle_peso"></span></p>
+        <p class="mb-4"><strong>Descripción:</strong> <span id="detalle_descripcion"></span></p>
+        <div class="text-right">
+            <button onclick="cerrarModal('modalDetalleHistorial')" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Cerrar</button>
+        </div>
+    </div>
+</div>
+

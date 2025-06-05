@@ -88,10 +88,16 @@ class MascotaController extends Controller
         return response()->json(['success' => true]);
     }
 
-    // Ver historial concreto
+    // Ver todos los historiales de una mascota (ordenados de más nuevo a más antiguo)
     public function verHistorial($id)
     {
-        $historial = Historial::findOrFail($id);
+        $historial = \App\Models\Trabajador\Historial::where('id_mascota', $id)
+            ->orderByDesc('fecha')
+            ->get();
+
         return response()->json($historial);
     }
+
+
+    
 }

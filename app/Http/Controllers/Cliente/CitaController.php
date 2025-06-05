@@ -51,9 +51,10 @@ class CitaController extends Controller
                 'hora' => $cita->hora,
                 'tipo' => $cita->tipo,
                 'sintomas' => $cita->sintomas,
+                'estado' => $cita->estado,
                 'mascota_nombre' => $cita->mascota->nombre ?? 'Mascota',
             ];
-        })
+        })        
         ->groupBy(function ($cita) {
             return \Carbon\Carbon::parse($cita['fecha'])->format('Y-m-d');
         });
@@ -62,7 +63,6 @@ class CitaController extends Controller
     
         $siguienteMes = $mes->copy()->addMonth()->format('Y-m');
         $mesAnterior = $mes->copy()->subMonth()->format('Y-m');
-        
         return view('cliente.citas.index', compact('dias', 'mes', 'mesAnterior', 'siguienteMes', 'citasUsuario'));
             
         return view('cliente.citas.index', [
@@ -123,7 +123,7 @@ class CitaController extends Controller
             'tipo' => $request->tipo,
             'sintomas' => $request->sintomas,
             'id_mascota' => $request->id_mascota,
-            'id_trabajador' => null, 
+            'estado' => "pendiente",
             'id_cliente' => auth()->id(), 
         ]);
         
@@ -151,12 +151,13 @@ public function actualizar(Request $request, $id)
     }
 
     $request->validate([
-        'fecha' => 'required|date',
+        'fecha' => ['required', 'date', 'after_or_equal:today'],
         'hora' => 'required',
         'tipo' => 'required|string',
         'sintomas' => 'required|string',
         'id_mascota' => 'required|exists:mascotas,id_mascota',
     ]);
+    
 
     $cita->update([
         'fecha' => $request->fecha,

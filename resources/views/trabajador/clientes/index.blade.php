@@ -3,10 +3,11 @@
 @section('content')
 <div class="py-10">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <h1 class="text-2xl font-bold text-gray-800 pb-5">👥 Gestión de Clientes</h1>
 
         {{-- Título y botón --}}
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">👥 Gestión de Clientes</h1>
+            <input type="text" id="filtroMascotas" placeholder="🔍 Buscar mascota o cliente..." class="border p-2 rounded w-1/2" onkeyup="filtrarTabla()">
             <button onclick="abrirModalCrear()" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded shadow transition">
                 ➕ Crear Cliente
             </button>
@@ -53,7 +54,19 @@
 
 {{-- Modales --}}
 @include('trabajador.clientes.partials.modales')
+{{-- Script buscador --}}
+<script>
+function filtrarTabla() {
+    const input = document.getElementById('filtroMascotas').value.toLowerCase();
+    const filas = document.querySelectorAll('table tbody tr');
 
+
+    filas.forEach(fila => {
+        const texto = fila.textContent.toLowerCase();
+        fila.style.display = texto.includes(input) ? '' : 'none';
+    });
+}
+</script>
 <script>
 function showToast(mensaje, tipo = 'success') {
     const toast = document.createElement('div');
@@ -100,7 +113,9 @@ function verCliente(id) {
                         <td class="px-2 py-1">${m.especie}</td>
                         <td class="px-2 py-1">${m.raza}</td>
                         <td class="px-2 py-1">${m.fecha_nacimiento}</td>
-                        <td class="px-2 py-1 text-center"><button class="text-blue-600 hover:underline">Ver Historial</button></td>
+                        <td class="px-2 py-1 text-center">
+                        <button onclick="verHistorialMascota(${m.id_mascota}, '${m.nombre}')" class="text-blue-600 hover:underline">Ver Historial</button>
+                        </td>
                     </tr>`;
             });
         } else {
@@ -109,6 +124,40 @@ function verCliente(id) {
 
         document.getElementById('modalVer').classList.remove('hidden');
     });
+}
+function verHistorialMascota(idMascota, nombre) {
+    fetch(`/trabajador/mascotas/historial/${idMascota}`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('historial_titulo').textContent = `📋 Historial médico de ${nombre}`;
+            const cuerpo = document.getElementById('tablaHistorial');
+            cuerpo.innerHTML = '';
+
+            if (data.length > 0) {
+                data.forEach(item => {
+                    cuerpo.innerHTML += `
+                        <tr>
+                            <td class="px-3 py-2">${item.fecha}</td>
+                            <td class="px-3 py-2">${item.peso ?? '—'} kg</td>
+                            <td class="px-3 py-2">${item.descripcion.slice(0, 40)}...</td>
+                            <td class="px-3 py-2 text-center">
+                                <button onclick="detalleHistorial('${item.fecha}', '${item.peso ?? '—'}', \`${item.descripcion.replace(/`/g, '\\`')}\`)" class="text-blue-600 hover:underline">Ver</button>
+                            </td>
+                        </tr>`;
+                });
+            } else {
+                cuerpo.innerHTML = '<tr><td colspan="4" class="text-center py-2 text-gray-500">Sin historial</td></tr>';
+            }
+
+            document.getElementById('modalHistorial').classList.remove('hidden');
+        });
+}
+
+function detalleHistorial(fecha, peso, descripcion) {
+    document.getElementById('detalle_fecha').textContent = fecha;
+    document.getElementById('detalle_peso').textContent = peso + ' kg';
+    document.getElementById('detalle_descripcion').textContent = descripcion;
+    document.getElementById('modalDetalleHistorial').classList.remove('hidden');
 }
 
 function editarCliente(id) {

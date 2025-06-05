@@ -146,6 +146,7 @@ Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador/citas')->name('t
     Route::delete('/{id}', [CitaTrabajadorController::class, 'destroy'])->name('eliminar');
 });
 
+Route::get('/trabajador/mascotas/historial/{id}', [MascotaTrabajadorController::class, 'verHistorial'])->name('trabajador.mascotas.historial');
 
 Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador')->group(function () {
     Route::get('/clientes', [ClienteController::class, 'index'])->name('trabajador.clientes');

@@ -64,21 +64,29 @@
                                 <p class="text-sm text-gray-600">Síntomas: {{ $cita->sintomas }}</p>
                             </div>
                             <div>
-                                @php
-                                    $pasada = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $cita->fecha . ' ' . $cita->hora)->isPast();
-                                @endphp
+    @php
+        $esPasada = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $cita->fecha . ' ' . $cita->hora)->isPast();
+    @endphp
 
-                                @if(!$pasada)
-                                    <form action="{{ route('cliente.citas.editar') }}" method="POST" class="inline">
-                                        @csrf
-                                        <input type="hidden" name="id_cita" value="{{ $cita->id_cita }}">
-                                        <button class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500">Editar</button>
-                                    </form>
-                                    <button onclick="eliminarCita({{ $cita->id_cita }})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Eliminar</button>
-                                @else
-                                    <span class="text-gray-400 italic">Finalizada</span>
-                                @endif
-                            </div>
+    @if($cita->estado === 'pendiente' && !$esPasada)
+        <form action="{{ route('cliente.citas.editar') }}" method="POST" class="inline">
+            @csrf
+            <input type="hidden" name="id_cita" value="{{ $cita->id_cita }}">
+            <button class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500">Editar</button>
+        </form>
+        <button onclick="eliminarCita({{ $cita->id_cita }})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Eliminar</button>
+
+    @elseif($cita->estado === 'no_asistio')
+        <span class="text-red-500 font-semibold">No asistió a la cita</span>
+
+    @elseif($cita->estado === 'atendida')
+        <span class="text-green-600 font-semibold">Atendida</span>
+
+    @else
+        <span class="text-gray-400 italic">Finalizada</span>
+    @endif
+</div>
+
                         </div>
                     </li>
                 @endforeach
