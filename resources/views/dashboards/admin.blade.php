@@ -1,17 +1,29 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Panel del admin
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    Bienvenido, {{ Auth::user()->nombre }}. Este es tu panel como admin.
-                </div>
-            </div>
+@section('content')
+<div class="max-w-7xl mx-auto py-12 px-4">
+    <h1 class="text-4xl font-extrabold text-blue-800 mb-10 animate__animated animate__fadeInDown">📊 Panel de Admin</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white shadow-md rounded-lg p-6 text-center hover:shadow-lg transition">
+            <h2 class="text-xl font-semibold text-gray-600 mb-2">Clientes</h2>
+            <p class="text-4xl text-blue-700 font-bold">{{ $clientes }}</p>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 text-center hover:shadow-lg transition">
+            <h2 class="text-xl font-semibold text-gray-600 mb-2">Trabajadores</h2>
+            <p class="text-4xl text-blue-700 font-bold">{{ $trabajadores }}</p>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 text-center hover:shadow-lg transition">
+            <h2 class="text-xl font-semibold text-gray-600 mb-2">Mascotas</h2>
+            <p class="text-4xl text-blue-700 font-bold">{{ $mascotas }}</p>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 text-center hover:shadow-lg transition">
+            <h2 class="text-xl font-semibold text-gray-600 mb-2">Citas pendientes</h2>
+            <p class="text-4xl text-blue-700 font-bold">{{ $citasPendientes }}</p>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection
