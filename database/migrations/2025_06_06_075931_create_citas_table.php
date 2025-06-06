@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->time('hora');
             $table->string('tipo');
             $table->text('sintomas');
-            $table->string('estado');
+            $table->string('estado')->default('pendiente');
             $table->unsignedBigInteger('id_mascota');
             $table->unsignedBigInteger('id_cliente');
         
