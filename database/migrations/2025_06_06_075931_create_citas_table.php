@@ -8,15 +8,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('citas', function (Blueprint $table) {
-            $table->id();  // Laravel estándar para clave primaria
+            $table->id();  
             $table->date('fecha');
             $table->time('hora');
-            $table->string('tipo'); // original enum
+            $table->string('tipo');
             $table->text('sintomas');
-            $table->string('estado'); // original enum
-            $table->integer('id_mascota');
-            $table->integer('id_cliente');
-            $table->string('citas_ibfk_1'); // tipo original: FOREIGN
+            $table->string('estado');
+            $table->foreignId('id_mascota')->constrained('mascotas')->onDelete('cascade');
+            $table->foreignId('id_cliente')->constrained('usuarios')->onDelete('cascade');
             $table->timestamps();
         });
     }
