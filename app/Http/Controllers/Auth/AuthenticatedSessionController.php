@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,7 +29,15 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
     
-        dd('LOGIN CORRECTO', Auth::check(), Auth::user());
+        Log::info('Login ejecutado', [
+            'check' => Auth::check(),
+            'user' => Auth::user(),
+            'session_id' => session()->getId(),
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent()
+        ]);
+    
+        return redirect()->intended(RouteServiceProvider::redirectByRole(Auth::user()));
     }
     
 
