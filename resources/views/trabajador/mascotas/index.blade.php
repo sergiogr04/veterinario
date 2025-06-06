@@ -78,7 +78,7 @@ function abrirModalCrear() {
 document.getElementById('dniClienteInput').addEventListener('input', function () {
     const dni = this.value;
     if (dni.length >= 5) {
-        fetch(`/trabajador/admin/dni/${dni}`)
+        fetch(`/trabajador/clientes/dni/${dni}`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {

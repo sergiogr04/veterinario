@@ -134,7 +134,7 @@ document.getElementById('formAtender').addEventListener('submit', function (e) {
             showToast("Cita atendida correctamente", "success");
             location.reload();
         } else {
-            showToast("Error al atender cita", "error");
+            setTimeout(() => location.reload(), 2000);
         }
     });
 });
@@ -151,12 +151,14 @@ function eliminarCita(id) {
     .then(data => {
         if (data.success) {
             showToast("Cita eliminada", "success");
-            location.reload();
+            setTimeout(() => location.reload(), 2000);
         } else {
             showToast("Error al eliminar cita", "error");
         }
     });
 }
+
 </script>
 
 @endsection
+

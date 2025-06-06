@@ -14,10 +14,10 @@ class DashboardTrabajadorController extends Controller
 {
     $hoy = Carbon::today();
 
-    $citasHoy = Cita::whereDate('fecha', $hoy)->count();
+    $citasHoy = Cita::whereDate('fecha', $hoy)->where('estado',"pendiente")->count();
     $citasAtendidas = Historial::count();
     $mascotasHoy = Cita::whereDate('fecha', $hoy)->distinct('id_mascota')->count('id_mascota');
-    $proximaCita = Cita::whereDate('fecha', $hoy)->orderBy('hora')->with('mascota.cliente')->first();
+    $proximaCita = Cita::whereDate('fecha', $hoy)->orderBy('hora')->with('mascota.cliente')->where('estado',"pendiente")->first();
     $historialReciente = Historial::orderByDesc('fecha')->limit(3)->with('mascota')->get();
     $totalMascotas = \App\Models\Trabajador\Mascota::count();
     $citasSemana = Cita::whereBetween('fecha', [$hoy, $hoy->copy()->addDays(7)])->count();

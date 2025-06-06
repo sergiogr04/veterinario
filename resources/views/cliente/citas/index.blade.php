@@ -174,7 +174,39 @@
         </form>
     </div>
 </div>
+@if(session('ok'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            mostrarToast("{{ session('ok') }}", 'success');
+        });
+    </script>
+@endif
 
+@if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            mostrarToast("{{ $errors->first() }}", 'error');
+        });
+    </script>
+@endif
+
+<script>
+    function mostrarToast(mensaje, tipo = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-5 right-5 px-4 py-2 text-white rounded shadow z-50 transition-opacity duration-300 ${
+            tipo === 'success' ? 'bg-green-600' :
+            tipo === 'error'   ? 'bg-red-600'   : 'bg-gray-600'
+        }`;
+        toast.textContent = mensaje;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('opacity-0');
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
+    }
+</script>
 {{-- Script para formulario --}}
 <script>
     function abrirFormulario(fecha) {

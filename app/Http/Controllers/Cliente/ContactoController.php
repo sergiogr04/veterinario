@@ -24,7 +24,7 @@ class ContactoController extends Controller
 
         // Enviar correo a la clínica con los datos
         Mail::raw("Nuevo mensaje de contacto:\n\nNombre: {$request->nombre}\nCorreo: {$request->email}\n\nMensaje:\n{$request->mensaje}", function ($message) {
-            $message->to('contacto@veterinariosanlorenzo.com')
+            $message->to('sgr.s3209@gmail.com')
                 ->subject('Nuevo mensaje desde el formulario de contacto');
         });
 
