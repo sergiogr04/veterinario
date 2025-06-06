@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('nombre', 50);
             $table->string('apellidos', 100);
             $table->string('direccion')->nullable();
-            $table->string('telefono', 15);
+            $table->string('telefono', 15)->nullable();
             $table->string('email', 100);
             $table->string('password', 255);
             $table->string('rol'); 
