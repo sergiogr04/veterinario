@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('usuarios', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id_usuario');
             $table->string('dni', 9)->unique();
             $table->string('nombre', 50);
             $table->string('apellidos', 100);
@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->string('telefono', 15)->nullable();
             $table->string('email', 100);
             $table->string('password', 255);
-            $table->string('rol'); 
-            $table->rememberToken();
+            $table->string('rol');
+            $table->rememberToken()->nullable();
             $table->timestamps();
         });
     }
