@@ -8,12 +8,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('historial', function (Blueprint $table) {
-            $table->id();  // Laravel estándar para clave primaria
+            $table->id('id_historial');
             $table->text('descripcion');
             $table->date('fecha');
             $table->string('peso');
-            $table->string('historial_ibfk_1');
+            $table->unsignedBigInteger('id_mascota');
             $table->timestamps();
+
+            $table->foreign('id_mascota')->references('id_mascota')->on('mascotas')->onDelete('cascade');
         });
     }
 
