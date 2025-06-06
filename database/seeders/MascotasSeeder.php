@@ -28,15 +28,6 @@ class MascotasSeeder extends Seeder
                 'id_cliente' => 1,
                 'foto' => 'misu.jpg'
             ],
-            [
-                'id_mascota' => 3,
-                'nombre' => 'Bunny',
-                'especie' => 'Conejo',
-                'raza' => 'Cabeza de León',
-                'fecha_nacimiento' => '2021-02-20',
-                'id_cliente' => 4,
-                'foto' => 'bunny.jpg'
-            ],
         ]);
     }
 }
