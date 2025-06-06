@@ -8,14 +8,16 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('mascotas', function (Blueprint $table) {
-            $table->id();  // Laravel estándar para clave primaria
+            $table->id('id_mascota'); // nombre correcto de tu PK según tu captura
             $table->string('nombre', 50);
             $table->string('especie', 50);
             $table->string('raza', 50);
             $table->date('fecha_nacimiento');
-            $table->string('foto', 255);
-            $table->string('mascotas_ibfk_1');
+            $table->string('foto', 255)->nullable();
+            $table->unsignedBigInteger('id_cliente'); // relación con usuarios
             $table->timestamps();
+
+            $table->foreign('id_cliente')->references('id')->on('usuarios')->onDelete('cascade');
         });
     }
 
