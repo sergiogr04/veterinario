@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Trabajador;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Trabajador\Mascota;
+use App\Models\Admin\Mascota;
 use Illuminate\Support\Str;
 
 class MascotaController extends Controller
@@ -14,7 +14,7 @@ class MascotaController extends Controller
     public function index()
     {
         $mascotas = Mascota::with('cliente')->get(); // Todas las mascotas
-        return view('trabajador.mascotas.index', compact('mascotas'));
+        return view('admin.mascotas.index', compact('mascotas'));
     }
 
 
@@ -91,7 +91,7 @@ class MascotaController extends Controller
     // Ver todos los historiales de una mascota (ordenados de más nuevo a más antiguo)
     public function verHistorial($id)
     {
-        $historial = \App\Models\Trabajador\Historial::where('id_mascota', $id)
+        $historial = \App\Models\Admin\Historial::where('id_mascota', $id)
             ->orderByDesc('fecha')
             ->get();
 

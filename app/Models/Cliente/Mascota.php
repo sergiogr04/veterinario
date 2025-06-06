@@ -15,16 +15,16 @@ class Mascota extends Model
 
     public function historial()
     {
-        return $this->hasMany(Historial::class, 'id_mascota', 'id_mascota');
-    }
+        return $this->hasMany(Historial::class, 'id_mascota', 'id_mascota')->orderByDesc('fecha');
+    }    
 
     public function ultimoHistorial()
     {
         return $this->hasOne(Historial::class, 'id_mascota', 'id_mascota')->latestOfMany('fecha');
     }
 
-    public function cliente()
+/*     public function cliente()
     {
         return $this->belongsTo(User::class, 'id_cliente', 'id_usuario');
-    }
+    } */
 }

@@ -51,7 +51,7 @@
 <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-green-600 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300"></div>
 
 {{-- Modales --}}
-@include('trabajador.mascotas.partials.modales')
+@include('admin.mascotas.partials.modales')
 
 {{-- Script buscador --}}
 <script>
@@ -78,7 +78,7 @@ function abrirModalCrear() {
 document.getElementById('dniClienteInput').addEventListener('input', function () {
     const dni = this.value;
     if (dni.length >= 5) {
-        fetch(`/trabajador/clientes/dni/${dni}`)
+        fetch(`/admin/clientes/dni/${dni}`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -94,7 +94,7 @@ document.getElementById('dniClienteInput').addEventListener('input', function ()
 
 // Ver mascota
 function verMascota(id) {
-    fetch(`/trabajador/mascotas/${id}`)
+    fetch(`/admin/mascotas/${id}`)
     .then(res => res.json())
     .then(data => {
         document.getElementById('ver_nombre').textContent = data.nombre;
@@ -138,7 +138,7 @@ function verHistorial(fecha, peso, descripcion) {
 
 // Editar mascota
 function editarMascota(id) {
-    fetch(`/trabajador/mascotas/${id}`)
+    fetch(`/admin/mascotas/${id}`)
     .then(res => res.json())
     .then(data => {
         document.getElementById('editar_id').value = data.id_mascota;
@@ -156,7 +156,7 @@ document.getElementById('formCrearMascota').addEventListener('submit', function 
     e.preventDefault();
     const formData = new FormData(this);
 
-    fetch('/trabajador/mascotas', {
+    fetch('/admin/mascotas', {
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
         body: formData
@@ -179,7 +179,7 @@ document.getElementById('formEditarMascota').addEventListener('submit', function
     const formData = new FormData(this);
     formData.append('_method', 'PUT');
 
-    fetch(`/trabajador/mascotas/${id}`, {
+    fetch(`/admin/mascotas/${id}`, {
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
         body: formData
@@ -199,7 +199,7 @@ document.getElementById('formEditarMascota').addEventListener('submit', function
 function eliminarMascota(id) {
     if (!confirm("¿Seguro que quieres eliminar esta mascota?")) return;
 
-    fetch(`/trabajador/mascotas/${id}`, {
+    fetch(`/admin/mascotas/${id}`, {
         method: 'DELETE',
         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
     })

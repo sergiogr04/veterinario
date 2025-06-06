@@ -53,7 +53,7 @@
 </div>
 
 {{-- Modales --}}
-@include('trabajador.clientes.partials.modales')
+@include('admin.clientes.partials.modales')
 {{-- Script buscador --}}
 <script>
 function filtrarTabla() {
@@ -93,7 +93,7 @@ function cerrarModal(id) {
 }
 
 function verCliente(id) {
-    fetch(`/trabajador/clientes/${id}`)
+    fetch(`/admin/clientes/${id}`)
     .then(res => res.json())
     .then(data => {
         document.getElementById('ver_dni').textContent = data.dni;
@@ -126,7 +126,7 @@ function verCliente(id) {
     });
 }
 function verHistorialMascota(idMascota, nombre) {
-    fetch(`/trabajador/mascotas/historial/${idMascota}`)
+    fetch(`/admin/mascotas/historial/${idMascota}`)
         .then(res => res.json())
         .then(data => {
             document.getElementById('historial_titulo').textContent = `📋 Historial médico de ${nombre}`;
@@ -161,7 +161,7 @@ function detalleHistorial(fecha, peso, descripcion) {
 }
 
 function editarCliente(id) {
-    fetch(`/trabajador/clientes/${id}`)
+    fetch(`/admin/clientes/${id}`)
     .then(res => res.json())
     .then(data => {
         document.getElementById('editar_id').value = id;
@@ -182,7 +182,7 @@ document.getElementById('formEditar').addEventListener('submit', function(e) {
     const form = new FormData(this);
     form.append('_method', 'PUT');
 
-    fetch(`/trabajador/clientes/${id}`, {
+    fetch(`/admin/clientes/${id}`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -204,7 +204,7 @@ document.getElementById('formCrear').addEventListener('submit', function(e) {
     e.preventDefault();
     const form = new FormData(this);
 
-    fetch(`/trabajador/clientes`, {
+    fetch(`/admin/clientes`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -225,7 +225,7 @@ document.getElementById('formCrear').addEventListener('submit', function(e) {
 function eliminarCliente(id) {
     if (!confirm('¿Eliminar este cliente?')) return;
 
-    fetch(`/trabajador/clientes/${id}`, {
+    fetch(`/admin/clientes/${id}`, {
         method: 'DELETE',
         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') }
     })

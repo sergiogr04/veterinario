@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Cliente\Mascota;
+use App\Models\Trabajador\Mascota;
 
 class Cita extends Model
 {
