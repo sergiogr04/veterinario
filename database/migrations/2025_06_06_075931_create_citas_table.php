@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('citas', function (Blueprint $table) {
             $table->id();  // Laravel estándar para clave primaria
-                        $table->date('fecha');
+            $table->date('fecha');
             $table->time('hora');
             $table->string('tipo'); // original enum
             $table->text('sintomas');
