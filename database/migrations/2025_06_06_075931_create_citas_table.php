@@ -14,8 +14,10 @@ return new class extends Migration {
             $table->string('tipo');
             $table->text('sintomas');
             $table->string('estado');
-            $table->foreignId('id_mascota')->constrained('mascotas')->onDelete('cascade');
-            $table->foreignId('id_cliente')->constrained('usuarios')->onDelete('cascade');
+            $table->unsignedBigInteger('id_mascota');
+            $table->unsignedBigInteger('id_cliente');
+            $table->foreign('id_mascota')->references('id_mascota')->on('mascotas')->onDelete('cascade');
+            $table->foreign('id_cliente')->references('id')->on('usuarios')->onDelete('cascade');
             $table->timestamps();
         });
     }
