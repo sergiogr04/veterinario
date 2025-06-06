@@ -9,10 +9,10 @@ return new class extends Migration {
     {
         Schema::create('historial', function (Blueprint $table) {
             $table->id();  // Laravel estándar para clave primaria
-                        $table->text('descripcion');
+            $table->text('descripcion');
             $table->date('fecha');
-            $table->string('peso'); // tipo original: float
-            $table->string('historial_ibfk_1'); // tipo original: FOREIGN
+            $table->string('peso');
+            $table->string('historial_ibfk_1');
             $table->timestamps();
         });
     }
