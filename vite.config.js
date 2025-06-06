@@ -8,6 +8,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/css/citas.css',
                 'resources/js/app.js',
+                'resources/css/landing.css',
             ],
             refresh: true,
         }),
