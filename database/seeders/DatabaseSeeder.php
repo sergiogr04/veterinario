@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             UsuariosSeeder::class,
             MascotasSeeder::class,
             CitasSeeder::class,
+            HistorialSeeder::class,
         ]);
     }
 }
