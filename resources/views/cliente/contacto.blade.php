@@ -21,8 +21,8 @@
 
         <p class="text-gray-700">
             📧 Correo electrónico:
-            <a href="mailto:contacto@veterinariosanlorenzo.com" class="text-blue-600 hover:underline">
-                contacto@veterinariosanlorenzo.com
+            <a href="mailto:soporteveterinariasanlorenzo@gmail.com" class="text-blue-600 hover:underline">
+                soporteveterinariasanlorenzo@gmail.com
             </a>
         </p>
     </div>

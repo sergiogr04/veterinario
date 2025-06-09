@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Services\Cliente\CitaService;
+use App\Mail\ConfirmacionCitaCliente;
+use Illuminate\Support\Facades\Mail;
 
 class CitaController extends Controller
 {
@@ -117,16 +119,17 @@ class CitaController extends Controller
             'id_mascota' => 'required|exists:mascotas,id_mascota',
         ]);
 
-        Cita::create([
+        $cita = Cita::create([
             'fecha' => $request->fecha,
             'hora' => $request->hora,
             'tipo' => $request->tipo,
             'sintomas' => $request->sintomas,
             'id_mascota' => $request->id_mascota,
             'estado' => "pendiente",
-            'id_cliente' => auth()->id(), 
+            'id_cliente' => auth()->id(),
         ]);
-        
+        $cita = Cita::with(['cliente', 'mascota'])->orderByDesc('id_cita')->first();
+        Mail::to(auth()->user()->email)->send(new ConfirmacionCitaCliente($cita));
 
         return redirect()->route('cliente.citas')->with('ok', 'Cita reservada correctamente');
     }

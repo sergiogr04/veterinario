@@ -17,8 +17,8 @@
                 </a>
             </p>
             <p>
-                📧 <a href="mailto:contacto@veterinariosanlorenzo.com" class="hover:text-blue-400">
-                    contacto@veterinariosanlorenzo.com
+                📧 <a href="mailto:soporteveterinariasanlorenzo@gmail.com" class="hover:text-blue-400">
+                    soporteveterinariasanlorenzo@gmail.com
                 </a>
             </p>
         </div>

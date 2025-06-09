@@ -10,7 +10,7 @@
     <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-10 transition transform hover:scale-[1.01] duration-200">
         <img src="{{ asset('images/mascotas/' . ($mascota->foto ?? 'default.webp')) }}"
              alt="{{ $mascota->nombre }}"
-             class="w-full h-64 object-cover">
+             class="w-full h-100 object-cover">
         
         <div class="p-6 space-y-2">
             <p class="text-lg"><strong>📘 Especie:</strong> {{ $mascota->especie }}</p>

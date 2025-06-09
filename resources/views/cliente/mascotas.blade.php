@@ -8,8 +8,8 @@
         <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
             @foreach ($mascotas as $mascota)
                 <a href="{{ route('cliente.mascota.historial', $mascota->id_mascota) }}" class="bg-white shadow hover:shadow-lg rounded-lg overflow-hidden transition">
-                    <img src="{{ asset('images/mascotas/' . ($mascota->foto ?? 'default.webp')) }}" alt="{{ $mascota->nombre }}" class="w-full h-40 object-cover">
-                    <div class="p-4">
+                <img src="{{ asset('images/mascotas/' . ($mascota->foto ?? 'default.webp')) }}" alt="{{ $mascota->nombre }}" class="w-full h-40 object-contain bg-gray-100">
+                <div class="p-4">
                         <h2 class="text-xl font-bold text-blue-800">{{ $mascota->nombre }}</h2>
                         <p class="text-sm text-gray-600">Edad: {{ \Carbon\Carbon::parse($mascota->fecha_nacimiento)->age ?? '—' }} años</p>
                         <p class="text-sm text-gray-600">Peso: {{ $mascota->ultimoHistorial->peso ?? '—' }} kg</p>

@@ -16,5 +16,9 @@ class Cita extends Model
     {
         return $this->belongsTo(Mascota::class, 'id_mascota');
     }
-    
+    public function cliente()
+{
+    return $this->belongsTo(\App\Models\User::class, 'id_cliente', 'id_usuario');
+}
+
 }
