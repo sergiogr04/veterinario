@@ -62,7 +62,7 @@
             <p><strong>Dueño:</strong> <span id="ver_dueno"></span></p>
             <div class="col-span-2">
                 <strong>📸 Foto:</strong><br>
-                <img id="ver_foto" src="{{ asset('images/mascotas/default.png') }}" class="w-32 h-32 object-cover rounded border mt-2" alt="Foto mascota">
+                <img id="ver_foto" src="{{ asset('images/mascotas/default.webp') }}" class="w-32 h-32 object-cover rounded border mt-2" alt="Foto mascota">
             </div>
         </div>
 

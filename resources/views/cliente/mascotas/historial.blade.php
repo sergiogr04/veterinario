@@ -8,7 +8,7 @@
 
     {{-- Ficha de la mascota --}}
     <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-10 transition transform hover:scale-[1.01] duration-200">
-        <img src="{{ asset('images/mascotas/' . ($mascota->foto ?? 'default.png')) }}"
+        <img src="{{ asset('images/mascotas/' . ($mascota->foto ?? 'default.webp')) }}"
              alt="{{ $mascota->nombre }}"
              class="w-full h-64 object-cover">
         

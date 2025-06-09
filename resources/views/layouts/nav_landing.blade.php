@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
         {{-- Logo a la izquierda (pero grande solo en móvil) --}}
         <a href="#" onclick="scrollToSection('hero')" class="shrink-0">
-            <img src="{{ asset('images/logo-clinica.png') }}" alt="Logo Clínica San Lorenzo"
+            <img src="{{ asset('images/logo-clinica.webp') }}" alt="Logo Clínica San Lorenzo"
                 class="h-[100px] md:h-[80px] w-auto">
         </a>
 

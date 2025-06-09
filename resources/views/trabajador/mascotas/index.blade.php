@@ -103,7 +103,7 @@ function verMascota(id) {
         document.getElementById('ver_raza').textContent = data.raza;
         document.getElementById('ver_peso').textContent = data.peso !== null ? data.peso + ' kg': 'Debe pesarse en la siguiente consulta';
         document.getElementById('ver_dueno').textContent = data.cliente.nombre + ' ' + data.cliente.apellidos + ' (' + data.cliente.dni + ')';
-        document.getElementById('ver_foto').src = `/images/mascotas/${data.foto ?? 'default.png'}`;
+        document.getElementById('ver_foto').src = `/images/mascotas/${data.foto ?? 'default.webp'}`;
 
         const tabla = document.getElementById('tablaHistorial');
         tabla.innerHTML = '';

@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
         {{-- Logo como Inicio --}}
         <a href="{{ route('dashboard_cliente') }}" class="shrink-0">
-            <img src="{{ asset('images/logo-clinica.png') }}" alt="Logo Clínica San Lorenzo" class="h-14 md:h-12 w-auto">
+            <img src="{{ asset('images/logo-clinica.webp') }}" alt="Logo Clínica San Lorenzo" class="h-14 md:h-12 w-auto">
         </a>
 
         {{-- Navegación escritorio --}}

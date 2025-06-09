@@ -8,7 +8,7 @@
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td align="center" style="padding: 40px 0;">
-                <img src="{{ asset('images/logo-clinica.png') }}" alt="Clínica San Lorenzo" style="height: 80px;">
+                <img src="{{ asset('images/logo-clinica.webp') }}" alt="Clínica San Lorenzo" style="height: 80px;">
             </td>
         </tr>
         <tr>

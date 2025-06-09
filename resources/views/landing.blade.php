@@ -45,7 +45,7 @@
             </p>
         </div>
         <div class="md:w-1/2 mt-10 md:mt-0 animate-slide">
-            <img src="{{ asset('images/veterinario.png') }}" alt="Veterinario principal" class="rounded-xl shadow-lg w-full max-w-md mx-auto">
+            <img src="{{ asset('images/veterinario.webp') }}" alt="Veterinario principal" class="rounded-xl shadow-lg w-full max-w-md mx-auto">
         </div>
     </div>
 </section>
@@ -55,10 +55,10 @@
     <h2 class="text-3xl font-bold text-blue-900 mb-12 animate-fade">Nuestros Servicios</h2>
     <div class="grid gap-8 px-6 md:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
         @foreach ([
-        ['icon' => 'consulta.png', 'title' => 'Consulta General', 'desc' => 'Revisiones completas y diagnósticos precisos.'],
-        ['icon' => 'vacuna.png', 'title' => 'Vacunación', 'desc' => 'Planes personalizados para cada mascota.'],
-        ['icon' => 'cirugia.png', 'title' => 'Cirugías', 'desc' => 'Tecnología de última generación.'],
-        ['icon' => 'urgencias.png', 'title' => 'Urgencias 24h', 'desc' => 'Atención rápida y eficaz.'],
+        ['icon' => 'consulta.webp', 'title' => 'Consulta General', 'desc' => 'Revisiones completas y diagnósticos precisos.'],
+        ['icon' => 'vacuna.webp', 'title' => 'Vacunación', 'desc' => 'Planes personalizados para cada mascota.'],
+        ['icon' => 'cirugia.webp', 'title' => 'Cirugías', 'desc' => 'Tecnología de última generación.'],
+        ['icon' => 'urgencias.webp', 'title' => 'Urgencias 24h', 'desc' => 'Atención rápida y eficaz.'],
         ] as $servicio)
         <div class="bg-blue-50 p-6 rounded-lg shadow-md transform hover:-translate-y-1 transition duration-300 animate-slide">
             <img src="{{ asset('images/' . $servicio['icon']) }}" alt="{{ $servicio['title'] }}" class="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 mx-auto mb-4">

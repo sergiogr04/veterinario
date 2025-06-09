@@ -20,7 +20,7 @@
         {{-- Logo centrado arriba --}}
         <div class="mb-6">
             <a href="/">
-                <img src="{{ asset('images/logo-clinica.png') }}" alt="Logo Clínica San Lorenzo" class="h-28 mx-auto">
+                <img src="{{ asset('images/logo-clinica.webp') }}" alt="Logo Clínica San Lorenzo" class="h-28 mx-auto">
             </a>
         </div>
 
