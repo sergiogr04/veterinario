@@ -38,6 +38,7 @@
 <div id="modalEditar" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-xl">
         <h2 class="text-2xl font-bold text-yellow-700 mb-4 flex items-center gap-2">✏️ Editar Cliente</h2>
+        <div id="erroresEditar" class="mb-4 hidden bg-red-100 border border-red-300 text-red-700 text-sm rounded p-3"></div>
         <form id="formEditar">
             <input type="hidden" name="id" id="editar_id">
             <div class="grid grid-cols-2 gap-4 text-sm">
@@ -61,6 +62,9 @@
 <div id="modalCrear" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-xl">
         <h2 class="text-2xl font-bold text-green-700 mb-4 flex items-center gap-2">➕ Crear Cliente</h2>
+        {{-- Contenedor de errores --}}
+        <div id="erroresCrear" class="mb-4 hidden bg-red-100 border border-red-300 text-red-700 text-sm rounded p-3"></div>
+
         <form id="formCrear">
             @csrf
             <div class="grid grid-cols-2 gap-4 text-sm">

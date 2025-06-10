@@ -41,9 +41,9 @@
 
     {{-- Menú móvil --}}
     <div x-show="mobileMenu" x-transition class="md:hidden bg-white shadow-md px-6 py-4 space-y-2">
-        <a href="{{ route('cliente.mascotas') }}" class="block hover:text-blue-600">Mascotas</a>
-        <a href="{{ route('admin.trabajadores.index') }}" class="block hover:text-blue-600">Pedir Cita</a>
-        <a href="{{ route('cliente.contacto') }}" class="block hover:text-blue-600">Contacto</a>
+        <a href="{{ route('admin.clientes') }}" class="block hover:text-blue-600">Clientes</a>
+        <a href="{{ route('admin.trabajadores.index') }}" class="block hover:text-blue-600">Trabajadores</a>
+        <a href="{{ route('admin.mascotas.index') }}" class="block hover:text-blue-600">Animales</a>
         <hr>
         <form method="POST" action="{{ route('logout') }}">
             @csrf

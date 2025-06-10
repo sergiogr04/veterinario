@@ -13,41 +13,39 @@
             </button>
         </div>
 
-        {{-- Tabla de clientes --}}
-        <div class="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    <tr>
-                        <th class="px-6 py-3 text-left">DNI</th>
-                        <th class="px-6 py-3 text-left">Nombre</th>
-                        <th class="px-6 py-3 text-left">Apellidos</th>
-                        <th class="px-6 py-3 text-left">Teléfono</th>
-                        <th class="px-6 py-3 text-left">Email</th>
-                        <th class="px-6 py-3 text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
-                    @forelse ($clientes as $cliente)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $cliente->dni }}</td>
-                            <td class="px-6 py-4">{{ $cliente->nombre }}</td>
-                            <td class="px-6 py-4">{{ $cliente->apellidos }}</td>
-                            <td class="px-6 py-4">{{ $cliente->telefono ?? '—' }}</td>
-                            <td class="px-6 py-4">{{ $cliente->email }}</td>
-                            <td class="px-6 py-4 text-center space-x-2">
-                                <button onclick="verCliente({{ $cliente->id_usuario }})" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-xs">👁 Ver</button>
-                                <button onclick="editarCliente({{ $cliente->id_usuario }})" class="bg-yellow-100 hover:text-yellow-800 text-yellow-600 px-3 py-1 rounded text-xs">✏️ Editar</button>
-                                <button onclick="eliminarCliente({{ $cliente->id_usuario }})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs">🗑 Eliminar</button>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">No hay clientes registrados.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+        {{-- Tabla de clientes con scroll horizontal --}}
+<div class="w-full overflow-x-auto">
+    <table class="min-w-max divide-y divide-gray-200">
+        <thead class="bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+            <tr>
+                <th class="px-6 py-3 text-left">DNI</th>
+                <th class="px-6 py-3 text-left">Nombre</th>
+                <th class="px-6 py-3 text-left">Apellidos</th>
+                <th class="px-6 py-3 text-left">Teléfono</th>
+                <th class="px-6 py-3 text-left">Email</th>
+                <th class="px-6 py-3 text-center whitespace-nowrap">Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
+            @foreach ($clientes as $cliente)
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">{{ $cliente->dni }}</td>
+                <td class="px-6 py-4">{{ $cliente->nombre }}</td>
+                <td class="px-6 py-4">{{ $cliente->apellidos }}</td>
+                <td class="px-6 py-4">{{ $cliente->telefono ?? '—' }}</td>
+                <td class="px-6 py-4">{{ $cliente->email }}</td>
+                <td class="px-6 py-4 text-center whitespace-nowrap space-x-2">
+                    <button onclick="verCliente({{ $cliente->id_usuario }})" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-xs">👁 Ver</button>
+                    <button onclick="editarCliente({{ $cliente->id_usuario }})" class="bg-yellow-100 hover:text-yellow-800 text-yellow-600 px-3 py-1 rounded text-xs">✏️ Editar</button>
+                    <button onclick="eliminarCliente({{ $cliente->id_usuario }})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs">🗑 Eliminar</button>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+            
+
 
     </div>
 </div>
@@ -178,49 +176,104 @@ function editarCliente(id) {
 
 document.getElementById('formEditar').addEventListener('submit', function(e) {
     e.preventDefault();
+
     const id = document.getElementById('editar_id').value;
     const form = new FormData(this);
     form.append('_method', 'PUT');
 
+    const erroresDiv = document.getElementById('erroresEditar');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
+
     fetch(`/trabajador/clientes/${id}`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
         },
         body: form
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showToast('Error inesperado', 'error');
+            }
+            return;
+        }
+
+        const data = await res.json();
+
         if (data.success) {
             showToast('Cliente actualizado correctamente', 'success');
             setTimeout(() => location.reload(), 1500);
         } else {
             showToast('Error al actualizar cliente', 'error');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        showToast('Error al conectar con el servidor', 'error');
     });
 });
 
+
 document.getElementById('formCrear').addEventListener('submit', function(e) {
     e.preventDefault();
+
     const form = new FormData(this);
+    const erroresDiv = document.getElementById('erroresCrear');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
 
     fetch(`/trabajador/clientes`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json' 
         },
         body: form
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' }); 
+            } else {
+                showToast('Error inesperado', 'error');
+            }
+            return;
+        }
+
+        const data = await res.json();
+
         if (data.success) {
             showToast('Cliente creado correctamente', 'success');
             setTimeout(() => location.reload(), 1500);
         } else {
             showToast('Error al crear cliente', 'error');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        showToast('Error al enviar el formulario', 'error');
     });
 });
+
 
 function eliminarCliente(id) {
     if (!confirm('¿Eliminar este cliente?')) return;

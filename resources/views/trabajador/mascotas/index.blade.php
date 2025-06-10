@@ -13,37 +13,38 @@
             </button>
         </div>
 
-        {{-- Tabla de mascotas --}}
-        <div class="bg-white shadow-xl sm:rounded-lg overflow-x-auto">
-            <table id="tablaMascotas" class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-100 text-xs font-medium text-gray-600 uppercase tracking-wider">
-                    <tr>
-                        <th class="px-6 py-3">Nombre</th>
-                        <th class="px-6 py-3">Especie</th>
-                        <th class="px-6 py-3">Raza</th>
-                        <th class="px-6 py-3">Dueño</th>
-                        <th class="px-6 py-3">DNI Cliente</th>
-                        <th class="px-6 py-3">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200 text-sm">
-                    @foreach ($mascotas as $mascota)
-                    <tr>
-                        <td class="px-6 py-4">{{ $mascota->nombre }}</td>
-                        <td class="px-6 py-4">{{ $mascota->especie }}</td>
-                        <td class="px-6 py-4">{{ $mascota->raza }}</td>
-                        <td class="px-6 py-4">{{ $mascota->cliente->nombre }} {{ $mascota->cliente->apellidos }}</td>
-                        <td class="px-6 py-4">{{ $mascota->cliente->dni }}</td>
-                        <td class="px-6 py-4 space-x-2">
-                            <button onclick="verMascota({{ $mascota->id_mascota }})" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-xs">👁 Ver</button>
-                            <button onclick="editarMascota({{ $mascota->id_mascota }})" class="bg-yellow-100 hover:text-yellow-800 text-yellow-600 px-3 py-1 rounded text-xs">✏️ Editar</button>
-                            <button onclick="eliminarMascota({{ $mascota->id_mascota }})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs">🗑 Eliminar</button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+        {{-- Tabla de mascotas con scroll horizontal responsivo --}}
+<div class="w-full overflow-x-auto bg-white shadow-xl sm:rounded-lg">
+    <table id="tablaMascotas" class="min-w-max divide-y divide-gray-200">
+        <thead class="bg-gray-100 text-xs font-medium text-gray-600 uppercase tracking-wider">
+            <tr>
+                <th class="px-6 py-3">Nombre</th>
+                <th class="px-6 py-3">Especie</th>
+                <th class="px-6 py-3">Raza</th>
+                <th class="px-6 py-3">Dueño</th>
+                <th class="px-6 py-3">DNI Cliente</th>
+                <th class="px-6 py-3 whitespace-nowrap text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200 text-sm">
+            @foreach ($mascotas as $mascota)
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">{{ $mascota->nombre }}</td>
+                <td class="px-6 py-4">{{ $mascota->especie }}</td>
+                <td class="px-6 py-4">{{ $mascota->raza }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ $mascota->cliente->nombre }} {{ $mascota->cliente->apellidos }}</td>
+                <td class="px-6 py-4">{{ $mascota->cliente->dni }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-center space-x-2">
+                    <button onclick="verMascota({{ $mascota->id_mascota }})" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-xs">👁 Ver</button>
+                    <button onclick="editarMascota({{ $mascota->id_mascota }})" class="bg-yellow-100 hover:text-yellow-800 text-yellow-600 px-3 py-1 rounded text-xs">✏️ Editar</button>
+                    <button onclick="eliminarMascota({{ $mascota->id_mascota }})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs">🗑 Eliminar</button>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
     </div>
 </div>
 
@@ -154,23 +155,52 @@ function editarMascota(id) {
 // Envío formulario crear
 document.getElementById('formCrearMascota').addEventListener('submit', function (e) {
     e.preventDefault();
+
     const formData = new FormData(this);
+    const erroresDiv = document.getElementById('erroresCrearMascota');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
 
     fetch('/trabajador/mascotas', {
         method: 'POST',
-        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
         body: formData
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showToast("Error inesperado al crear mascota", "error");
+            }
+            return;
+        }
+
+        const data = await res.json();
+
         if (data.success) {
             showToast("Mascota creada correctamente", "success");
-            location.reload();
+            setTimeout(() => location.reload(), 1500);
         } else {
             showToast("Error al crear mascota", "error");
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        showToast("Error de conexión", "error");
     });
 });
+
 
 // Envío formulario editar
 document.getElementById('formEditarMascota').addEventListener('submit', function (e) {

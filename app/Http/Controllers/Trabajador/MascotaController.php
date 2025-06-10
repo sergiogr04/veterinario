@@ -34,13 +34,19 @@ class MascotaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'especie' => 'required|string|max:100',
-            'raza' => 'nullable|string|max:100',
-            'fecha_nacimiento' => 'required|date',
-            'id_cliente' => 'required|exists:usuarios,id_usuario',
-            'foto' => 'nullable|image|max:2048'
+            'nombre' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
+            'especie' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:100'],
+            'raza' => ['nullable', 'regex:/^[\pL\s\-]+$/u', 'max:100'],
+            'fecha_nacimiento' => ['required', 'date', 'before_or_equal:today'],
+            'id_cliente' => ['required', 'exists:usuarios,id_usuario'],
+            'foto' => ['nullable', 'image', 'max:2048']
+        ], [
+            'nombre.regex' => 'El nombre solo puede contener letras, espacios y guiones.',
+            'especie.regex' => 'La especie solo puede contener letras, espacios y guiones.',
+            'raza.regex' => 'La raza solo puede contener letras, espacios y guiones.',
+            'fecha_nacimiento.before_or_equal' => 'La fecha de nacimiento no puede ser futura.',
         ]);
+        
     
         if ($request->hasFile('foto')) {
             $nombreArchivo = Str::uuid() . '.' . $request->foto->extension();

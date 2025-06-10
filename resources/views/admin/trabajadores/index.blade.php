@@ -12,6 +12,9 @@
             </button>
         </div>
 
+        {{-- Tabla de trabajadores responsiva --}}
+<div class="overflow-x-auto">
+    <div class="min-w-full inline-block align-middle">
         <div class="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5">
             <table class="min-w-full divide-y divide-gray-200" id="tablaTrabajadores">
                 <thead class="bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -30,7 +33,7 @@
                             <td class="px-6 py-4">{{ $t->dni }}</td>
                             <td class="px-6 py-4">{{ $t->nombre }}</td>
                             <td class="px-6 py-4">{{ $t->apellidos }}</td>
-                            <td class="px-6 py-4">{{ $t->telefono ?? '—' }}</td>
+                            <td class="py-4">{{ $t->telefono ?? '—' }}</td>
                             <td class="px-6 py-4">{{ $t->email }}</td>
                             <td class="px-6 py-4 text-center space-x-2">
                                 <button onclick="verTrabajador({{ $t->id_usuario }})" class="bg-blue-100 text-blue-700 px-3 py-1 rounded text-xs">👁 Ver</button>
@@ -42,6 +45,9 @@
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+
 
         {{-- Toast --}}
         <div id="toast" class="hidden fixed bottom-5 right-5 bg-green-600 text-white px-4 py-2 rounded shadow-lg"></div>

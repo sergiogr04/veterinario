@@ -13,7 +13,9 @@
             </button>
         </div>
 
-        {{-- Tabla de clientes --}}
+        {{-- Tabla de clientes responsiva --}}
+<div class="overflow-x-auto">
+    <div class="min-w-full inline-block align-middle">
         <div class="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -48,6 +50,8 @@
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
 
     </div>
 </div>

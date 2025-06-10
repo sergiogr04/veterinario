@@ -28,14 +28,47 @@ class ClienteController extends Controller
         $cliente = User::where('rol', 'cliente')->findOrFail($id);
     
         $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'telefono' => 'nullable|string|max:20',
-            'direccion' => 'nullable|string|max:255',
-            'dni' => 'required|string|unique:usuarios,dni,' . $id . ',id_usuario',
-            'email' => 'required|email|unique:usuarios,email,' . $id . ',id_usuario',
-            'password' => 'nullable|string|min:6'
+            'dni' => [
+                'required',
+                'regex:/^[0-9]{8}[A-Za-z]$/',
+                'unique:usuarios,dni,' . $id . ',id_usuario'
+            ],
+            'nombre' => [
+                'required',
+                'regex:/^[\pL\s\-]+$/u',
+                'max:255'
+            ],
+            'apellidos' => [
+                'required',
+                'regex:/^[\pL\s\-]+$/u',
+                'max:255'
+            ],
+            'telefono' => [
+                'nullable',
+                'regex:/^[0-9]{9}$/'
+            ],
+            'direccion' => [
+                'nullable',
+                'string',
+                'max:255'
+            ],
+            'email' => [
+                'required',
+                'email',
+                'unique:usuarios,email,' . $id . ',id_usuario'
+            ],
+            'password' => [
+                'nullable',
+                'string',
+                'min:6'
+            ],
+        ], [
+            'dni.regex' => 'El DNI debe tener 8 dígitos seguidos de una letra.',
+            'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
+            'apellidos.regex' => 'Los apellidos solo pueden contener letras y espacios.',
+            'telefono.regex' => 'El teléfono debe contener exactamente 9 dígitos.',
         ]);
+        
     
         if ($validated['password']) {
             $validated['password'] = bcrypt($validated['password']);
@@ -62,13 +95,38 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'dni' => 'required|string|unique:usuarios,dni',
-            'nombre' => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'telefono' => 'nullable|string|max:20',
-            'email' => 'required|email|unique:usuarios,email',
-            'password' => 'required|string|min:6|confirmed',
+            'dni' => [
+                'required',
+                'regex:/^[0-9]{8}[A-Za-z]$/',
+                'unique:usuarios,dni'
+            ],
+            'nombre' => [
+                'required',
+                'regex:/^[\pL\s\-]+$/u',
+                'max:255'
+            ],
+            'apellidos' => [
+                'required',
+                'regex:/^[\pL\s\-]+$/u',
+                'max:255'
+            ],
+            'telefono' => [
+                'nullable',
+                'regex:/^[0-9]{9}$/'
+            ],
+            'email' => [
+                'required',
+                'email',
+                'unique:usuarios,email'
+            ],
+            'password' => [
+                'required',
+                'string',
+                'min:6',
+                'confirmed'
+            ],
         ]);
+        
 
         $validated['password'] = bcrypt($validated['password']);
         $validated['rol'] = 'cliente';

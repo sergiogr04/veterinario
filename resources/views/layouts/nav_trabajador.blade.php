@@ -42,17 +42,18 @@
 
     {{-- Menú móvil --}}
     <div x-show="mobileMenu" x-transition class="md:hidden bg-white shadow-md px-6 py-4 space-y-2">
-        <a href="{{ route('trabajador.clientes') }}" class="hover:text-blue-600">Clientes</a>
-        <a href="{{ route('trabajador.citas.index') }}" class="hover:text-blue-600">Gestión de Citas</a>
-        <a href="{{ route('trabajador.mascotas.index') }}" class="block hover:text-blue-600">Animales</a>
-        <hr>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                Cerrar sesión
-            </button>
-        </form>
-    </div>
+    <a href="{{ route('trabajador.clientes') }}" class="block hover:text-blue-600">Clientes</a>
+    <a href="{{ route('trabajador.citas.index') }}" class="block hover:text-blue-600">Gestión de Citas</a>
+    <a href="{{ route('trabajador.mascotas.index') }}" class="block hover:text-blue-600">Animales</a>
+    <hr>
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+            Cerrar sesión
+        </button>
+    </form>
+</div>
+
 </header>
 
 {{-- AlpineJS --}}

@@ -34,7 +34,7 @@
                         <td class="px-6 py-4">{{ $mascota->raza }}</td>
                         <td class="px-6 py-4">{{ $mascota->cliente->nombre }} {{ $mascota->cliente->apellidos }}</td>
                         <td class="px-6 py-4">{{ $mascota->cliente->dni }}</td>
-                        <td class="px-6 py-4 space-x-2">
+                        <td class="px-6 py-4 text-center space-x-2">
                             <button onclick="verMascota({{ $mascota->id_mascota }})" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-xs">👁 Ver</button>
                             <button onclick="editarMascota({{ $mascota->id_mascota }})" class="bg-yellow-100 hover:text-yellow-800 text-yellow-600 px-3 py-1 rounded text-xs">✏️ Editar</button>
                             <button onclick="eliminarMascota({{ $mascota->id_mascota }})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs">🗑 Eliminar</button>
