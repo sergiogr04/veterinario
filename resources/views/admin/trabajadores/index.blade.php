@@ -121,50 +121,103 @@ function editarTrabajador(id) {
 // Formulario CREAR trabajador
 document.getElementById('formCrearTrabajador').addEventListener('submit', function (e) {
     e.preventDefault();
+
     const form = new FormData(this);
+    const erroresDiv = document.getElementById('erroresCrearTrabajador');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
 
     fetch(`/admin/trabajadores`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
         },
         body: form
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                mostrarToast("Error inesperado al crear trabajador", "error");
+            }
+            return;
+        }
+
+        const data = await res.json();
+
         if (data.success) {
             mostrarToast('Trabajador creado correctamente', 'success');
             setTimeout(() => location.reload(), 1500);
         } else {
             mostrarToast('Error al crear trabajador', 'error');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        mostrarToast('Error de conexión con el servidor', 'error');
     });
 });
 
-// Formulario EDITAR trabajador
+
 document.getElementById('formEditarTrabajador').addEventListener('submit', function (e) {
     e.preventDefault();
+
     const id = document.getElementById('editar_id').value;
     const form = new FormData(this);
     form.append('_method', 'PUT');
 
+    const erroresDiv = document.getElementById('erroresEditarTrabajador');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
+
     fetch(`/admin/trabajadores/${id}`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
         },
         body: form
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                mostrarToast('Error inesperado al actualizar trabajador', 'error');
+            }
+            return;
+        }
+
+        const data = await res.json();
         if (data.success) {
             mostrarToast('Trabajador actualizado correctamente', 'success');
             setTimeout(() => location.reload(), 1500);
         } else {
             mostrarToast('Error al actualizar trabajador', 'error');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        mostrarToast('Error de conexión con el servidor', 'error');
     });
 });
+
 
 // Eliminar trabajador
 function eliminarTrabajador(id) {

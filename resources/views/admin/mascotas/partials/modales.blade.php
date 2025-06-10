@@ -2,6 +2,7 @@
 <div id="modalCrear" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 max-w-xl w-full overflow-y-auto max-h-[90vh]">
         <h2 class="text-xl font-semibold mb-4">➕ Crear Mascota</h2>
+        <div id="erroresCrearMascota" class="mb-4 hidden bg-red-100 border border-red-300 text-red-700 text-sm rounded p-3"></div>
         <form id="formCrearMascota" enctype="multipart/form-data">
             @csrf
             <div class="grid grid-cols-2 gap-4 text-sm">
@@ -30,6 +31,7 @@
 <div id="modalEditar" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 max-w-xl w-full">
         <h2 class="text-xl font-semibold mb-4">✏️ Editar Mascota</h2>
+        <div id="erroresEditarMascota" class="mb-4 hidden bg-red-100 border border-red-300 text-red-700 text-sm rounded p-3"></div>
         <form id="formEditarMascota" enctype="multipart/form-data">
             @csrf
             <input type="hidden" id="editar_id" name="id">

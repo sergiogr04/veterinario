@@ -151,49 +151,103 @@ function editarMascota(id) {
     });
 }
 
-// Envío formulario crear
 document.getElementById('formCrearMascota').addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
+    const erroresDiv = document.getElementById('erroresCrearMascota');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
 
     fetch('/admin/mascotas', {
         method: 'POST',
-        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
         body: formData
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showToast("Error inesperado al crear mascota", "error");
+            }
+            return;
+        }
+
+        const data = await res.json();
         if (data.success) {
             showToast("Mascota creada correctamente", "success");
-            location.reload();
+            setTimeout(() => location.reload(), 1500);
         } else {
             showToast("Error al crear mascota", "error");
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        showToast("Error de conexión con el servidor", "error");
     });
 });
 
-// Envío formulario editar
+
 document.getElementById('formEditarMascota').addEventListener('submit', function (e) {
     e.preventDefault();
+
     const id = document.getElementById('editar_id').value;
     const formData = new FormData(this);
     formData.append('_method', 'PUT');
 
+    const erroresDiv = document.getElementById('erroresEditarMascota');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
+
     fetch(`/admin/mascotas/${id}`, {
         method: 'POST',
-        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
         body: formData
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showToast("Error inesperado al actualizar mascota", "error");
+            }
+            return;
+        }
+
+        const data = await res.json();
         if (data.success) {
             showToast("Mascota actualizada", "success");
-            location.reload();
+            setTimeout(() => location.reload(), 1500);
         } else {
             showToast("Error al actualizar", "error");
         }
+    })
+    .catch(err => {
+        console.error(err);
+        showToast("Error de conexión con el servidor", "error");
     });
 });
+
 
 // Eliminar
 function eliminarMascota(id) {
