@@ -2,6 +2,7 @@
 <div id="modalCrear" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 max-w-xl w-full overflow-y-auto max-h-[90vh]">
         <h2 class="text-xl font-semibold mb-4">➕ Crear Mascota</h2>
+        <div id="erroresCrearMascota" class="mb-4 hidden bg-red-100 border border-red-300 text-red-700 text-sm rounded p-3"></div>
         <form id="formCrearMascota" enctype="multipart/form-data">
             @csrf
             <div class="grid grid-cols-2 gap-4 text-sm">
@@ -13,16 +14,10 @@
                 <input type="text" id="dniClienteInput" placeholder="DNI del cliente" class="border p-2 rounded col-span-2" required>
                 <input type="text" id="nombreClientePreview" disabled placeholder="Nombre del cliente" class="border p-2 rounded col-span-2 bg-gray-100">
 
-                <label for="foto" class="col-span-2 flex items-center justify-center gap-2 cursor-pointer border p-2 rounded bg-gray-100 hover:bg-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h2l2-3h10l2 3h2a2 2 0 012 2v10a2 2 0 01-2 2H3a2 2 0 01-2-2V9a2 2 0 012-2z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13a3 3 0 100-6 3 3 0 000 6z" />
-                    </svg>
-                    <span class="text-sm text-gray-700">Tomar o seleccionar foto</span>
-                    <input type="file" name="foto" id="foto" accept="image/*" capture="environment" class="hidden">
-                </label>
+                <input type="file" name="foto" accept="image/*" class="col-span-2 border p-2 rounded">
             </div>
 
+            <input type="hidden" name="id_cliente" id="clienteIdInput">
 
             <div class="mt-4 text-right space-x-2">
                 <button type="button" onclick="cerrarModal('modalCrear')" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancelar</button>

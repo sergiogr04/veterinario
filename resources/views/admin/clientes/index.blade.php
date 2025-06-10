@@ -13,7 +13,9 @@
             </button>
         </div>
 
-        {{-- Tabla de clientes --}}
+        {{-- Tabla de clientes responsiva --}}
+<div class="overflow-x-auto">
+    <div class="min-w-full inline-block align-middle">
         <div class="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -48,6 +50,8 @@
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
 
     </div>
 </div>
@@ -178,49 +182,104 @@ function editarCliente(id) {
 
 document.getElementById('formEditar').addEventListener('submit', function(e) {
     e.preventDefault();
+
     const id = document.getElementById('editar_id').value;
     const form = new FormData(this);
     form.append('_method', 'PUT');
 
+    const erroresDiv = document.getElementById('erroresEditar');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
+
     fetch(`/admin/clientes/${id}`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
         },
         body: form
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showToast('Error inesperado al actualizar cliente', 'error');
+            }
+            return;
+        }
+
+        const data = await res.json();
+
         if (data.success) {
             showToast('Cliente actualizado correctamente', 'success');
             setTimeout(() => location.reload(), 1500);
         } else {
             showToast('Error al actualizar cliente', 'error');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        showToast('Error de conexión con el servidor', 'error');
     });
 });
 
+
 document.getElementById('formCrear').addEventListener('submit', function(e) {
     e.preventDefault();
+
     const form = new FormData(this);
+    const erroresDiv = document.getElementById('erroresCrear');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
 
     fetch(`/admin/clientes`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
         },
         body: form
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showToast('Error inesperado al crear cliente', 'error');
+            }
+            return;
+        }
+
+        const data = await res.json();
+
         if (data.success) {
             showToast('Cliente creado correctamente', 'success');
             setTimeout(() => location.reload(), 1500);
         } else {
             showToast('Error al crear cliente', 'error');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        showToast('Error de conexión con el servidor', 'error');
     });
 });
+
 
 function eliminarCliente(id) {
     if (!confirm('¿Eliminar este cliente?')) return;

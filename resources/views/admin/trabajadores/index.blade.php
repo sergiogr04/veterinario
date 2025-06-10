@@ -12,6 +12,9 @@
             </button>
         </div>
 
+        {{-- Tabla de trabajadores responsiva --}}
+<div class="overflow-x-auto">
+    <div class="min-w-full inline-block align-middle">
         <div class="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5">
             <table class="min-w-full divide-y divide-gray-200" id="tablaTrabajadores">
                 <thead class="bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -30,7 +33,7 @@
                             <td class="px-6 py-4">{{ $t->dni }}</td>
                             <td class="px-6 py-4">{{ $t->nombre }}</td>
                             <td class="px-6 py-4">{{ $t->apellidos }}</td>
-                            <td class="px-6 py-4">{{ $t->telefono ?? '—' }}</td>
+                            <td class="py-4">{{ $t->telefono ?? '—' }}</td>
                             <td class="px-6 py-4">{{ $t->email }}</td>
                             <td class="px-6 py-4 text-center space-x-2">
                                 <button onclick="verTrabajador({{ $t->id_usuario }})" class="bg-blue-100 text-blue-700 px-3 py-1 rounded text-xs">👁 Ver</button>
@@ -42,6 +45,9 @@
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+
 
         {{-- Toast --}}
         <div id="toast" class="hidden fixed bottom-5 right-5 bg-green-600 text-white px-4 py-2 rounded shadow-lg"></div>
@@ -115,50 +121,103 @@ function editarTrabajador(id) {
 // Formulario CREAR trabajador
 document.getElementById('formCrearTrabajador').addEventListener('submit', function (e) {
     e.preventDefault();
+
     const form = new FormData(this);
+    const erroresDiv = document.getElementById('erroresCrearTrabajador');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
 
     fetch(`/admin/trabajadores`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
         },
         body: form
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                mostrarToast("Error inesperado al crear trabajador", "error");
+            }
+            return;
+        }
+
+        const data = await res.json();
+
         if (data.success) {
             mostrarToast('Trabajador creado correctamente', 'success');
             setTimeout(() => location.reload(), 1500);
         } else {
             mostrarToast('Error al crear trabajador', 'error');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        mostrarToast('Error de conexión con el servidor', 'error');
     });
 });
 
-// Formulario EDITAR trabajador
+
 document.getElementById('formEditarTrabajador').addEventListener('submit', function (e) {
     e.preventDefault();
+
     const id = document.getElementById('editar_id').value;
     const form = new FormData(this);
     form.append('_method', 'PUT');
 
+    const erroresDiv = document.getElementById('erroresEditarTrabajador');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
+
     fetch(`/admin/trabajadores/${id}`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
         },
         body: form
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            if (res.status === 422 && data.errors) {
+                erroresDiv.classList.remove('hidden');
+                Object.values(data.errors).forEach(mensajes => {
+                    mensajes.forEach(mensaje => {
+                        erroresDiv.innerHTML += `<div>• ${mensaje}</div>`;
+                    });
+                });
+                erroresDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                mostrarToast('Error inesperado al actualizar trabajador', 'error');
+            }
+            return;
+        }
+
+        const data = await res.json();
         if (data.success) {
             mostrarToast('Trabajador actualizado correctamente', 'success');
             setTimeout(() => location.reload(), 1500);
         } else {
             mostrarToast('Error al actualizar trabajador', 'error');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        mostrarToast('Error de conexión con el servidor', 'error');
     });
 });
+
 
 // Eliminar trabajador
 function eliminarTrabajador(id) {

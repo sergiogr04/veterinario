@@ -40,34 +40,41 @@
     </div>
 
     <h2 class="text-xl font-semibold text-gray-700 mb-2">🟢 Próximas citas</h2>
-    <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left bg-white rounded shadow">
-            <thead class="bg-gray-100 text-gray-600 uppercase">
-                <tr>
-                    <th class="px-4 py-2">Fecha</th>
-                    <th>Hora</th>
-                    <th>Mascota</th>
-                    <th>Dueño</th>
-                    <th>DNI</th>
-                    <th>Tipo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($citasFuturas as $cita)
-                <tr class="border-b">
-                    <td class="px-4 py-2">{{ $cita->fecha }}</td>
-                    <td>{{ $cita->hora }}</td>
-                    <td>{{ $cita->mascota->nombre }}</td>
-                    <td>{{ $cita->mascota->cliente->nombre }} {{ $cita->mascota->cliente->apellidos }}</td>
-                    <td>{{ $cita->mascota->cliente->dni }}</td>
-                    <td>{{ ucfirst($cita->tipo) }}</td>
-                </tr>
-                @empty
-                <tr><td colspan="6" class="text-center py-3 text-gray-500">Sin próximas citas</td></tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+    <div class="w-full overflow-x-auto">
+    <table class="min-w-full text-sm text-left bg-white rounded shadow">
+    <thead class="bg-gray-100 text-gray-600 uppercase">
+    <tr>
+        <th class="px-4 py-2">Fecha</th>
+        <th class="px-4 py-2">Hora</th>
+        <th class="px-4 py-2">Mascota</th>
+        <th class="px-4 py-2">Dueño</th>
+        <th class="px-4 py-2">DNI</th>
+        <th class="px-4 py-2">Tipo</th>
+        <th class="px-4 py-2 text-center">Acciones</th>
+    </tr>
+</thead>
+<tbody>
+    @forelse ($citasFuturas as $cita)
+    <tr class="border-b">
+        <td class="px-4 py-2">{{ $cita->fecha }}</td>
+        <td class="px-4 py-2">{{ $cita->hora }}</td>
+        <td class="px-4 py-2">{{ $cita->mascota->nombre }}</td>
+        <td class="px-4 py-2">{{ $cita->mascota->cliente->nombre }} {{ $cita->mascota->cliente->apellidos }}</td>
+        <td class="px-4 py-2">{{ $cita->mascota->cliente->dni }}</td>
+        <td class="px-4 py-2">{{ ucfirst($cita->tipo) }}</td>
+        <td class="px-4 py-2 text-center space-x-2">
+            <button onclick="verCita({{ $cita->id_cita }})" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-xs">👁 Ver</button>
+            <button onclick="eliminarCita({{ $cita->id_cita }})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs">🗑 Eliminar</button>
+        </td>
+    </tr>
+    @empty
+    <tr><td colspan="7" class="text-center py-3 text-gray-500">Sin próximas citas</td></tr>
+    @endforelse
+</tbody>
+
+    </table>
+</div>
+
 </div>
 
 @include('trabajador.citas.partials.modal')
