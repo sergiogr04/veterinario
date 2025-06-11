@@ -22,7 +22,7 @@
             </button>
 
             <div x-show="userMenu" x-transition class="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2 z-50">
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" class="mb-0">
                     @csrf
                     <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         Cerrar sesión
