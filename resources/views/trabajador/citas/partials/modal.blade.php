@@ -44,11 +44,6 @@
     <div class="bg-white rounded p-6 max-w-xl w-full">
         
         <h1 class="text-3xl font-bold text-blue-800 mb-6">✏️ Reservar Cita</h1>
-        @php
-            $citaPasada = isset($cita) && $cita->fecha && $cita->hora
-                ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $cita->fecha . ' ' . $cita->hora)->isPast()
-                : false;
-        @endphp
 
         <div id="erroresCrear" class="mb-4 hidden bg-red-100 border border-red-300 text-red-700 text-sm rounded p-3"></div>
         <form id="formCrearCita" method="POST">
@@ -70,10 +65,10 @@
             {{-- Tipo --}}
             <label class="block mb-2 text-sm font-medium">Tipo de cita</label>
             <select name="tipo" class="w-full border px-3 py-2 rounded mb-4" required>
-                <option value="urgencia" {{ $cita->tipo === 'urgencia' ? 'selected' : '' }}>Urgencia</option>
-                <option value="consulta" {{ $cita->tipo === 'consulta' ? 'selected' : '' }}>Consulta</option>
-                <option value="revision" {{ $cita->tipo === 'revision' ? 'selected' : '' }}>Revisión</option>
-                <option value="vacuna" {{ $cita->tipo === 'vacuna' ? 'selected' : '' }}>Vacuna</option>
+                <option value="urgencia">Urgencia</option>
+                <option value="consulta">Consulta</option>
+                <option value="revision">Revisión</option>
+                <option value="vacuna">Vacuna</option>
             </select>
 
             {{-- Síntomas --}}
@@ -91,7 +86,6 @@
 
 
             <div class="flex justify-between gap-4">
-                @if (!$citaPasada)
                 <div class="flex flex-col sm:flex-row gap-4 mt-6">
                     <button type="submit" class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition whitespace-nowrap">
                         💾 Guardar Cambios
@@ -101,7 +95,6 @@
                         ❌ Cancelar
                     </button>
                 </div>
-                @endif
             </div>
         </form>
     </div>
