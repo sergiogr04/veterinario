@@ -45,8 +45,11 @@
         
         <h1 class="text-3xl font-bold text-blue-800 mb-6">✏️ Reservar Cita</h1>
         @php
-        $citaPasada = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $cita->fecha . ' ' . $cita->hora)->isPast();
+            $citaPasada = isset($cita) && $cita->fecha && $cita->hora
+                ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $cita->fecha . ' ' . $cita->hora)->isPast()
+                : false;
         @endphp
+
         <div id="erroresCrear" class="mb-4 hidden bg-red-100 border border-red-300 text-red-700 text-sm rounded p-3"></div>
         <form id="formCrearCita" method="POST">
             @csrf
