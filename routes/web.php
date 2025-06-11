@@ -151,6 +151,9 @@ Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador/mascotas')->name
 */
 
 Route::middleware(['auth', 'isTrabajador'])->prefix('trabajador/citas')->name('trabajador.citas.')->group(function () {
+    Route::get('/mascotas-por-dni', [CitaTrabajadorController::class, 'buscarMascotasPorDni']);
+    Route::get('/horas-disponibles', [CitaTrabajadorController::class, 'horasDisponibles'])->name('horasDisponibles');
+    Route::post('/crear', [CitaTrabajadorController::class, 'crear'])->name('crear');
     Route::get('/', [CitaTrabajadorController::class, 'index'])->name('index');
     Route::get('/{id}', [CitaTrabajadorController::class, 'ver'])->name('ver');
     Route::post('/{id}/atender', [CitaTrabajadorController::class, 'atender'])->name('atender');

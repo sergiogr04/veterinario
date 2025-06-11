@@ -3,7 +3,11 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 py-8">
     <h1 class="text-2xl font-bold text-gray-800 pb-5">📅 Gestión de Citas</h1>
-
+    {{-- Encabezado con buscador y botón --}}
+    <div class="flex justify-between items-center mb-4">
+        <input type="text" id="filtroMascotas" placeholder="🔍 Buscar mascota o cliente..." class="border p-2 rounded w-1/2" onkeyup="filtrarTabla()">
+        <button onclick="reservarCita()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">📋 Reservar cita</button>
+    </div>
     <h2 class="text-xl font-semibold text-gray-700 mb-2">🔴 Citas para hoy</h2>
     <div class="overflow-x-auto mb-6">
     <table class="w-full text-sm bg-white shadow-md rounded-lg overflow-hidden">
@@ -41,7 +45,7 @@
 
     <h2 class="text-xl font-semibold text-gray-700 mb-2">🟢 Próximas citas</h2>
     <div class="w-full overflow-x-auto">
-    <table class="min-w-full text-sm text-left bg-white rounded shadow">
+    <table id="tablaCitas" class="min-w-full text-sm text-left bg-white rounded shadow">
     <thead class="bg-gray-100 text-gray-600 uppercase">
     <tr>
         <th class="px-4 py-2">Fecha</th>
@@ -79,9 +83,126 @@
 
 @include('trabajador.citas.partials.modal')
 <script>
-function cerrarModal(id) {
-    document.getElementById(id).classList.add('hidden');
+function filtrarTabla() {
+    const input = document.getElementById('filtroMascotas').value.toLowerCase();
+    const filas = document.querySelectorAll('#tablaCitas tbody tr');
+
+    filas.forEach(fila => {
+        const texto = fila.textContent.toLowerCase();
+        fila.style.display = texto.includes(input) ? '' : 'none';
+    });
 }
+function reservarCita() {
+    document.getElementById('formularioCita').classList.remove('hidden');
+
+    const fechaInput = document.querySelector('input[name="fecha"]');
+    if (fechaInput && fechaInput.value) {
+        cargarHorasDisponibles(fechaInput.value);
+    }
+}
+
+
+function buscarMascotasPorDni(dni) {
+    const select = document.getElementById('select_mascotas');
+
+    if (dni.length !== 9) {
+        select.innerHTML = '<option value="">Selecciona una mascota</option>';
+        return;
+    }
+
+    fetch('/trabajador/citas/mascotas-por-dni?dni=' + dni)
+        .then(res => res.json())
+        .then(mascotas => {
+            select.innerHTML = '<option value="">Selecciona una mascota</option>';
+            mascotas.forEach(m => {
+                const option = document.createElement('option');
+                option.value = m.id_mascota;
+                option.textContent = m.nombre;
+                select.appendChild(option);
+            });
+        });
+}
+
+function cargarHorasDisponibles(fecha) {
+    const select = document.getElementById('horasDisponibles');
+    select.innerHTML = '<option value="">Cargando...</option>';
+
+    fetch(`/trabajador/citas/horas-disponibles?fecha=${fecha}`)
+    .then(res => res.json())
+        .then(horas => {
+            select.innerHTML = '<option value="">Selecciona una hora</option>';
+            if (horas.length === 0) {
+                select.innerHTML = '<option value="">Sin horas disponibles</option>';
+            } else {
+                horas.forEach(hora => {
+                    const option = document.createElement('option');
+                    option.value = hora + ':00';
+                    option.textContent = hora;
+                    select.appendChild(option);
+                });
+            }
+        });
+}
+
+
+document.getElementById('formCrearCita').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const erroresDiv = document.getElementById('erroresCrear');
+    erroresDiv.classList.add('hidden');
+    erroresDiv.innerHTML = '';
+
+    const formData = new FormData(this);
+
+    fetch('/trabajador/citas/crear', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showToast("Cita creada correctamente", "success");
+            location.reload();
+        } else if (data.errors) {
+            erroresDiv.classList.remove('hidden');
+            data.errors.forEach(err => {
+                erroresDiv.innerHTML += `<div>• ${err}</div>`;
+            });
+        }
+    })
+    .catch(() => {
+        erroresDiv.classList.remove('hidden');
+        erroresDiv.innerHTML = 'Error inesperado. Inténtalo de nuevo.';
+    });
+});
+
+
+function cerrarModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.add('hidden');
+
+    if (id === 'formularioCita') {
+        const form = document.getElementById('formCrearCita');
+        form.reset();
+
+        // Reset select de mascotas manualmente
+        const selectMascotas = document.getElementById('select_mascotas');
+        selectMascotas.innerHTML = '<option value="">Selecciona una mascota</option>';
+
+        // Limpiar el select de horas
+        const selectHoras = document.getElementById('horasDisponibles');
+        selectHoras.innerHTML = '<option value="">Cargando...</option>';
+
+        // Ocultar errores si quedaron visibles
+        const errores = document.getElementById('erroresCrear');
+        errores.classList.add('hidden');
+        errores.innerHTML = '';
+    }
+}
+
 
 // Ver Cita
 function verCita(id) {

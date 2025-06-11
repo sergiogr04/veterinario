@@ -15,10 +15,15 @@
         {{-- Fecha --}}
         <label class="block mb-2 text-sm font-medium">Fecha</label>
         @php
-        $hoy = \Carbon\Carbon::now()->format('Y-m-d');
+            $hoy = \Carbon\Carbon::now()->format('Y-m-d');
+            $limite = \Carbon\Carbon::now()->addMonths(1)->format('Y-m-d');
         @endphp
 
-        <input type="date" name="fecha" value="{{ $cita->fecha }}" class="w-full border px-3 py-2 rounded mb-4" onchange="cargarHorasDisponibles(this.value)" min="{{ $hoy }}" required>
+        <input type="date" name="fecha" value="{{ $cita->fecha }}" 
+            class="w-full border px-3 py-2 rounded mb-4" 
+            onchange="cargarHorasDisponibles(this.value)" 
+            min="{{ $hoy }}" max="{{ $limite }}" required>
+
 
         {{-- Hora --}}
         <label class="block mb-2 text-sm font-medium">Hora</label>
