@@ -13,7 +13,6 @@ return new class extends Migration {
             $table->date('fecha');
             $table->string('peso');
             $table->unsignedBigInteger('id_mascota');
-            $table->timestamps();
 
             $table->foreign('id_mascota')->references('id_mascota')->on('mascotas')->onDelete('cascade');
         });

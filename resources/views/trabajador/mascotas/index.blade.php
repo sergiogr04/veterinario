@@ -15,7 +15,7 @@
 
         {{-- Tabla de mascotas con scroll horizontal responsivo --}}
 <div class="w-full overflow-x-auto bg-white shadow-xl sm:rounded-lg">
-    <table id="tablaMascotas" class="min-w-max divide-y divide-gray-200">
+    <table id="tablaMascotas" class="w-full table-auto min-w-max divide-y divide-gray-200">
         <thead class="bg-gray-100 text-xs font-medium text-gray-600 uppercase tracking-wider">
             <tr>
                 <th class="px-6 py-3">Nombre</th>

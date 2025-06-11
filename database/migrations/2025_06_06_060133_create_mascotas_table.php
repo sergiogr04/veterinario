@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->date('fecha_nacimiento');
             $table->string('foto', 255)->nullable();
             $table->unsignedBigInteger('id_cliente'); // relación con usuarios
-            $table->timestamps();
 
             $table->foreign('id_cliente')->references('id_usuario')->on('usuarios')->onDelete('cascade');
         });

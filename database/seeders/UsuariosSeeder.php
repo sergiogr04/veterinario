@@ -19,7 +19,6 @@ class UsuariosSeeder extends Seeder
                 'email' => 'laura@gmail.com',
                 'password' => '$2y$12$WLGeoRUg525yXO80fDjkN.hIo9lvcnJuujDr2OZ7bhOMvHEWJTeY.',
                 'rol' => 'cliente',
-                'remember_token' => '',
             ],
             [
                 'dni' => '99999999Z',
@@ -30,7 +29,6 @@ class UsuariosSeeder extends Seeder
                 'email' => 'admin@vet.com',
                 'password' => '$2y$12$WLGeoRUg525yXO80fDjkN.hIo9lvcnJuujDr2OZ7bhOMvHEWJTeY.',
                 'rol' => 'admin',
-                'remember_token' => '',
             ],
             [
                 'dni' => '20094973J',
@@ -41,7 +39,6 @@ class UsuariosSeeder extends Seeder
                 'email' => 'manugarcia@gmail.com',
                 'password' => '$2y$12$rdkBqbHgd/N5oKeOeg4HqO9nSUgZw8FXGV5kwiPOVyBhSJjSXCD3e',
                 'rol' => 'trabajador',
-                'remember_token' => '',
             ],
         ]);
     }

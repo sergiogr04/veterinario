@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->foreign('id_mascota')->references('id_mascota')->on('mascotas')->onDelete('cascade');
             $table->foreign('id_cliente')->references('id_usuario')->on('usuarios')->onDelete('cascade');
         
-            $table->timestamps();
         });
         
     }

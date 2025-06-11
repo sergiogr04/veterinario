@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->string('password', 255);
             $table->string('rol');
             $table->rememberToken()->nullable();
-            $table->timestamps();
         });
     }
 

@@ -15,7 +15,7 @@
 
         {{-- Tabla de clientes con scroll horizontal --}}
 <div class="w-full overflow-x-auto">
-    <table class="min-w-max divide-y divide-gray-200">
+    <table class="w-full table-auto min-w-max divide-y divide-gray-200">
         <thead class="bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
             <tr>
                 <th class="px-6 py-3 text-left">DNI</th>
