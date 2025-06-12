@@ -48,6 +48,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Mascota::class, 'id_cliente', 'id_usuario');
     }
-
+    public function getNombreAttribute($value)
+    {
+        return ucfirst($value); 
+    }
+    public function getApellidosAttribute($value)
+    {
+        return ucwords($value); 
+    }
+    
     
 }
